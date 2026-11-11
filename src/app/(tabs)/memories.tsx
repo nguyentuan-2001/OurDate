@@ -13,7 +13,7 @@ export default function MemoriesScreen() {
         <View style={{ gap: spacing.xs }}>
           <Text variant="display">Kỷ niệm</Text>
           <Text variant="caption" color="textSecondary">
-            {MOCK_DATA_LABEL} — ảnh kỷ niệm sẽ bổ sung sau MVP
+            {MOCK_DATA_LABEL} — upload ảnh kỷ niệm sẽ triển khai ở Milestone 7
           </Text>
         </View>
 

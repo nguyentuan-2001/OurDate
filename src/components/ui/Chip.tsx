@@ -21,7 +21,7 @@ export function Chip({ label, selected = false, onPress }: ChipProps) {
       style={({ pressed }) => [
         styles.base,
         {
-          backgroundColor: selected ? colors.primary : colors.surfaceAlt,
+          backgroundColor: selected ? colors.primary : colors.primarySoft,
           borderColor: selected ? colors.primary : colors.border,
           borderRadius: radius.full,
           paddingHorizontal: spacing.md,

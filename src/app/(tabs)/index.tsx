@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { FlatList, Pressable, View } from 'react-native';
 
 import { Card, Chip, EmptyState, Screen, Text } from '@/components/ui';
@@ -13,11 +13,16 @@ export default function HomeScreen() {
   return (
     <Screen scroll>
       <View style={{ gap: spacing.xl }}>
-        <View style={{ gap: spacing.xs }}>
-          <Text variant="bodySmall" color="textSecondary">
-            Chào buổi sáng 👋
-          </Text>
-          <Text variant="display">Our Date</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <View style={{ gap: spacing.xs }}>
+            <Text variant="bodySmall" color="textSecondary">
+              Chào buổi sáng 👋
+            </Text>
+            <Text variant="display">Our Date</Text>
+          </View>
+          <Pressable onPress={() => router.push('/settings')} hitSlop={8} style={{ paddingTop: spacing.xs }}>
+            <Ionicons name="settings-outline" size={24} color={colors.textSecondary} />
+          </Pressable>
         </View>
 
         <Link href="/planner" asChild>

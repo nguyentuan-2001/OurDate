@@ -52,7 +52,7 @@ export default function PlannerScreen() {
           </Text>
         </View>
 
-        <Card style={{ backgroundColor: colors.surfaceAlt, borderColor: colors.surfaceAlt }}>
+        <Card style={{ backgroundColor: colors.surfaceSecondary, borderColor: colors.surfaceSecondary }}>
           <Text variant="caption" color="textSecondary">
             Giao diện Milestone 1 — chưa kết nối bộ lập lịch trình thật. Nhấn &quot;Tạo lịch trình&quot; để
             xem thông báo trạng thái.

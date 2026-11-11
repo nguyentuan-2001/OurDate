@@ -2,7 +2,9 @@
 
 > Tài liệu quy định cách Claude Code làm việc trong repository
 > `our-date`. Đọc file này trước mọi thay đổi mã nguồn. Kết hợp với
-> `OUR_DATE_BLUEPRINT.md` và `PROGRESS.md`.
+> `OUR_DATE_BLUEPRINT.md`, `PROGRESS.md` và các đặc tả chi tiết trong
+> `docs/` (`UI_DESIGN_SPEC.md`, `USER_FLOWS.md`, `DATABASE_SCHEMA.md`,
+> `API_INTEGRATION_SPEC.md`).
 
 ------------------------------------------------------------------------
 
@@ -14,8 +16,10 @@ công việc kỹ thuật và hướng dẫn người dùng bằng ngôn ngữ d
 
 ### Bắt buộc
 
-1.  Đọc `CLAUDE.md`, `OUR_DATE_BLUEPRINT.md` và `PROGRESS.md` trước khi
-    bắt đầu công việc.
+1.  Đọc `CLAUDE.md`, `OUR_DATE_BLUEPRINT.md`, `PROGRESS.md` và các file
+    đặc tả trong `docs/` (`UI_DESIGN_SPEC.md`, `USER_FLOWS.md`,
+    `DATABASE_SCHEMA.md`, `API_INTEGRATION_SPEC.md` nếu tồn tại) trước
+    khi bắt đầu công việc.
 2.  Kiểm tra repository và trạng thái Git trước khi sửa file.
 3.  Làm theo từng task nhỏ, có thể kiểm tra và nghiệm thu.
 4.  Sau mỗi task hoàn thành, cập nhật `PROGRESS.md` ngay trong cùng lượt
@@ -39,12 +43,22 @@ Khi có thông tin mâu thuẫn, áp dụng thứ tự:
 
 1.  Yêu cầu mới nhất được chủ dự án xác nhận rõ ràng.
 2.  `CLAUDE.md` --- quy tắc làm việc và bảo mật.
-3.  `OUR_DATE_BLUEPRINT.md` --- đặc tả sản phẩm và phạm vi.
-4.  `PROGRESS.md` --- trạng thái triển khai hiện tại.
-5.  Quyết định kỹ thuật đã ghi trong `docs/DECISIONS.md` (nếu có).
+3.  `OUR_DATE_BLUEPRINT.md` --- đặc tả sản phẩm và phạm vi. Phạm vi MVP
+    trong blueprint không tự động bị mở rộng bởi tài liệu chi tiết hơn ở
+    mục 4 nếu thay đổi đó chưa được chủ dự án xác nhận.
+4.  Đặc tả chi tiết trong `docs/` --- `UI_DESIGN_SPEC.md` (giao diện),
+    `USER_FLOWS.md` (luồng người dùng), `DATABASE_SCHEMA.md` (schema),
+    `API_INTEGRATION_SPEC.md` (tích hợp API). Các tài liệu này bổ sung
+    chi tiết triển khai; nếu mâu thuẫn với nhau hoặc với
+    `OUR_DATE_BLUEPRINT.md`, không tự ý chọn phương án hay mở rộng phạm
+    vi sản phẩm.
+5.  `PROGRESS.md` --- trạng thái triển khai hiện tại.
+6.  Quyết định kỹ thuật đã ghi trong `docs/DECISIONS.md` (nếu có).
 
-Nếu phát hiện mâu thuẫn, không âm thầm chọn một phương án. Ghi nhận và
-hỏi chủ dự án nếu ảnh hưởng đáng kể.
+Nếu phát hiện mâu thuẫn, không âm thầm chọn một phương án. Ghi vào
+`PROGRESS.md` mục "Lỗi và vấn đề cần xử lý" và hỏi chủ dự án nếu ảnh
+hưởng đáng kể. Khi chủ dự án đã xác nhận cách xử lý, ghi quyết định đó
+vào `PROGRESS.md` mục "Quyết định kỹ thuật" để không phải hỏi lại.
 
 ## 3. Quy trình bắt buộc cho mỗi task
 

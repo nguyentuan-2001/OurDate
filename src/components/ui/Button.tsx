@@ -24,8 +24,6 @@ export function Button({
   const { colors, spacing, radius } = useTheme();
   const isDisabled = disabled || loading;
 
-  const backgroundColor =
-    variant === 'primary' ? colors.primary : variant === 'secondary' ? colors.surfaceAlt : 'transparent';
   const textColor =
     variant === 'primary' ? colors.onPrimary : variant === 'ghost' ? colors.primary : colors.textPrimary;
   const borderColor = variant === 'ghost' ? colors.primary : 'transparent';
@@ -38,13 +36,20 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         {
-          backgroundColor,
+          backgroundColor:
+            variant === 'primary'
+              ? pressed
+                ? colors.primaryPressed
+                : colors.primary
+              : variant === 'secondary'
+                ? colors.surfaceSecondary
+                : 'transparent',
           borderColor,
           borderWidth: variant === 'ghost' ? 1 : 0,
           paddingVertical: spacing.md,
           paddingHorizontal: spacing.lg,
           borderRadius: radius.md,
-          opacity: isDisabled ? 0.5 : pressed ? 0.85 : 1,
+          opacity: isDisabled ? 0.5 : variant !== 'primary' && pressed ? 0.85 : 1,
           alignSelf: fullWidth ? 'stretch' : 'flex-start',
         },
       ]}
