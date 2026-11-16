@@ -1,44 +1,44 @@
 /**
  * Our Date color tokens.
- * Source of truth: docs/UI_DESIGN_SPEC.md section 3 (Cute Romantic, Light + Dark).
- * Confirmed by chủ dự án 2026-11-11 to replace the earlier blueprint placeholder palette.
+ * Nguồn: mockup trong src/UI/*.html + assets/images/UI.png (chủ dự án cung cấp
+ * 2026-11-16), thay cho bản phác thảo trước đó theo docs/UI_DESIGN_SPEC.md.
  */
 
 export const lightColors = {
-  background: '#FFF7F8',
+  background: '#FFF1F5',
   surface: '#FFFFFF',
-  surfaceSecondary: '#FFF0F4',
+  surfaceSecondary: '#FFEBF1',
   primary: '#FF6F91',
-  primaryPressed: '#E9577D',
-  primarySoft: '#FFD6E2',
-  secondary: '#B86A83',
+  primaryPressed: '#FF4C78',
+  primarySoft: '#FFD6E5',
+  secondary: '#8B5CF6',
   onPrimary: '#FFFFFF',
-  textPrimary: '#49313B',
-  textSecondary: '#866D78',
-  border: '#F1DDE4',
+  textPrimary: '#4A1525',
+  textSecondary: '#8A4A5E',
+  border: '#FFE0E9',
   success: '#3D9B75',
-  warning: '#E5A33B',
+  warning: '#FFB703',
   danger: '#D94D67',
   tabBar: '#FFFFFF',
-  overlay: 'rgba(73, 49, 59, 0.45)',
+  overlay: 'rgba(74, 21, 37, 0.45)',
 } as const;
 
 export const darkColors = {
-  background: '#171317',
-  surface: '#241D23',
-  surfaceSecondary: '#30232C',
-  primary: '#FF789B',
-  primaryPressed: '#E85E83',
-  primarySoft: '#593344',
-  secondary: '#D58BA2',
-  onPrimary: '#2A1620',
-  textPrimary: '#FFF0F4',
-  textSecondary: '#C2AAB5',
-  border: '#493541',
+  background: '#1C1013',
+  surface: '#2A1920',
+  surfaceSecondary: '#35202A',
+  primary: '#FF7E9F',
+  primaryPressed: '#FF5F85',
+  primarySoft: '#4A2430',
+  secondary: '#A78BFA',
+  onPrimary: '#2A1016',
+  textPrimary: '#FBE7EC',
+  textSecondary: '#D39CAE',
+  border: '#4A2730',
   success: '#75C6A2',
-  warning: '#F0BE65',
+  warning: '#FFC94D',
   danger: '#F17B91',
-  tabBar: '#211A20',
+  tabBar: '#241620',
   overlay: 'rgba(0, 0, 0, 0.55)',
 } as const;
 

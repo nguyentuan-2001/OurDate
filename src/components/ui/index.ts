@@ -8,6 +8,8 @@ export { EmptyState } from './EmptyState';
 export type { EmptyStateProps } from './EmptyState';
 export { ErrorState } from './ErrorState';
 export type { ErrorStateProps } from './ErrorState';
+export { FieldCard } from './FieldCard';
+export type { FieldCardProps } from './FieldCard';
 export { Input } from './Input';
 export type { InputProps } from './Input';
 export { Loading } from './Loading';

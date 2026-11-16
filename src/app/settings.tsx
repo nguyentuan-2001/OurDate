@@ -5,11 +5,13 @@ import { Pressable, View } from 'react-native';
 
 import { Button, Card, Screen, Text } from '@/components/ui';
 import { useAuth } from '@/features/auth/AuthProvider';
+import { useCouple } from '@/features/couple/CoupleProvider';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function SettingsScreen() {
   const { colors, spacing } = useTheme();
   const { session, signOut } = useAuth();
+  const { couple } = useCouple();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   async function handleSignOut() {
@@ -34,6 +36,19 @@ export default function SettingsScreen() {
           </Text>
           <Text variant="bodyMedium">{session?.user.email ?? 'Chưa đăng nhập'}</Text>
         </Card>
+
+        {couple ? (
+          <Card style={{ gap: spacing.xs }}>
+            <Text variant="caption" color="textSecondary">
+              Không gian của chúng ta
+            </Text>
+            <Text variant="bodyMedium">{couple.displayName ?? 'Chưa đặt tên'}</Text>
+            <Text variant="bodySmall" color="textSecondary">
+              {couple.memberCount} / 2 thành viên
+              {couple.memberCount < 2 ? ' · Đang chờ người ấy tham gia' : ''}
+            </Text>
+          </Card>
+        ) : null}
 
         <Button label="Đăng xuất" variant="secondary" onPress={handleSignOut} loading={isSigningOut} />
       </View>

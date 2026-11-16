@@ -1,0 +1,442 @@
+<!doctype html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      name="viewport"
+    />
+    <title>Lịch hẹn - Our Date</title>
+    <!-- Tailwind CSS CDN with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-pink': '#FF6F91',
+              'brand-light-pink': '#FFD6E5',
+              'brand-cream-pink': '#FFF1F5',
+              'brand-dark': '#4A1D2F',
+              'brand-muted': '#A47E8C',
+            },
+            fontFamily: {
+              sans: [
+                '-apple-system',
+                'BlinkMacSystemFont',
+                '"SF Pro Text"',
+                '"SF Pro Display"',
+                'Roboto',
+                'Helvetica',
+                'Arial',
+                'sans-serif',
+              ],
+            },
+            boxShadow: {
+              'soft-card': '0 4px 20px -2px rgba(255, 111, 145, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+              fab: '0 8px 20px rgba(255, 111, 145, 0.45)',
+              bubble: '0 0 0 3px #FFAEC3, 0 4px 10px rgba(255, 111, 145, 0.25)',
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Typography & Global styles -->
+    <style data-purpose="typography">
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+    <!-- Layout styling & subtle details -->
+    <style data-purpose="layout-decorations">
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .date-circle {
+        background: radial-gradient(circle, #ffe4ed 0%, #ffb6cb 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-stone-100 flex justify-center items-center min-h-screen sm:p-4 p-0 select-none">
+    <!-- BEGIN: PhoneContainer -->
+    <!-- Outer phone container simulating mobile viewport -->
+    <div
+      class="w-full max-w-[390px] h-[844px] bg-[#FFF0F4] relative flex flex-col overflow-hidden sm:rounded-[48px] sm:shadow-2xl border-[6px] border-white/60"
+      data-purpose="phone-frame"
+    >
+      <!-- BEGIN: iOSStatusBar -->
+      <header
+        class="w-full pt-3 px-7 pb-2 flex justify-between items-center text-[#2A1E22] text-xs font-semibold z-20"
+        data-purpose="status-bar"
+      >
+        <span class="tracking-tight text-[15px] font-semibold text-[#301c24]">9:41</span>
+        <!-- iOS Right Status Icons -->
+        <div class="flex items-center space-x-1.5 text-[#301c24]">
+          <!-- Signal -->
+          <svg class="w-4 h-3.5 fill-current" viewbox="0 0 17 12">
+            <rect height="4" rx="0.6" width="2.5" x="0" y="8"></rect>
+            <rect height="6.5" rx="0.6" width="2.5" x="4.5" y="5.5"></rect>
+            <rect height="9" rx="0.6" width="2.5" x="9" y="3"></rect>
+            <rect height="11.5" rx="0.6" width="2.5" x="13.5" y="0.5"></rect>
+          </svg>
+          <!-- Wifi -->
+          <svg class="w-4 h-3.5 fill-current" viewbox="0 0 16 12">
+            <path
+              d="M8 2.8C10.7 2.8 13.1 3.9 14.8 5.6L16 4.3C13.9 2.2 11.1 1 8 1C4.9 1 2.1 2.2 0 4.3L1.2 5.6C2.9 3.9 5.3 2.8 8 2.8ZM8 6.5C9.8 6.5 11.4 7.2 12.6 8.4L13.8 7.1C12.3 5.7 10.3 4.8 8 4.8C5.7 4.8 3.7 5.7 2.2 7.1L3.4 8.4C4.6 7.2 6.2 6.5 8 6.5ZM8 10.2C8.8 10.2 9.5 10.5 10 11.1L8 13L6 11.1C6.5 10.5 7.2 10.2 8 10.2Z"
+            ></path>
+          </svg>
+          <!-- Battery -->
+          <div class="w-5 h-2.5 border border-[#301c24] rounded-sm p-0.5 flex items-center relative">
+            <div class="h-full w-3.5 bg-[#301c24] rounded-[1px]"></div>
+            <div class="w-0.5 h-1 bg-[#301c24] absolute -right-1 top-0.5 rounded-r-xs"></div>
+          </div>
+        </div>
+      </header>
+      <!-- END: iOSStatusBar -->
+      <!-- BEGIN: ScreenHeader -->
+      <!-- App Navigation Header -->
+      <div class="relative px-6 py-2 flex items-center justify-between" data-purpose="app-header">
+        <div class="w-6"></div>
+        <!-- Balance spacer -->
+        <h1 class="text-[20px] font-bold text-[#4B1E2D] flex items-center gap-1.5 tracking-tight">
+          <span>Lịch hẹn</span>
+          <svg class="w-4 h-4 fill-[#FF5A84] inline-block animate-pulse" viewbox="0 0 24 24">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            ></path>
+          </svg>
+        </h1>
+        <!-- 3-Dots Menu Button -->
+        <button
+          aria-label="More options"
+          class="p-1 text-[#4B1E2D] hover:opacity-75 transition-opacity"
+          type="button"
+        >
+          <svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+      <!-- END: ScreenHeader -->
+      <!-- Scrollable Content Area -->
+      <main class="flex-1 overflow-y-auto hide-scrollbar px-4 pb-24 pt-1" data-purpose="main-content">
+        <!-- BEGIN: SegmentedControl -->
+        <div
+          class="mx-2 mb-3 bg-[#FFE7EE]/70 p-1 rounded-full flex items-center text-xs backdrop-blur-sm border border-[#FFD8E3]/60"
+          data-purpose="segmented-tabs"
+        >
+          <button
+            class="flex-1 py-1.5 text-center font-medium rounded-full bg-[#FFDAE3] text-[#FF4C78] shadow-sm font-semibold transition-all"
+          >
+            Lịch của chúng ta
+          </button>
+          <button
+            class="flex-1 py-1.5 text-center font-normal text-[#8A6372] hover:text-[#55303E] transition-all"
+          >
+            Đã qua
+          </button>
+        </div>
+        <!-- END: SegmentedControl -->
+        <!-- BEGIN: CalendarSection -->
+        <section class="px-2 pt-1 pb-2" data-purpose="calendar-widget">
+          <!-- Month and Navigation Controls -->
+          <div class="flex items-center justify-between px-3 mb-3">
+            <button
+              aria-label="Previous month"
+              class="p-1 text-[#5E2E40] hover:text-[#FF527D] transition-colors"
+            >
+              <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewbox="0 0 24 24">
+                <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+            <span class="text-[15px] font-bold text-[#4B1D2F] tracking-tight">Tháng 11, 2026</span>
+            <button aria-label="Next month" class="p-1 text-[#5E2E40] hover:text-[#FF527D] transition-colors">
+              <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewbox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Weekday Headers -->
+          <div class="grid grid-cols-7 text-center text-[11px] font-semibold text-[#8B6B78] mb-1">
+            <div>T2</div>
+            <div>T3</div>
+            <div>T4</div>
+            <div>T5</div>
+            <div>T6</div>
+            <div>T7</div>
+            <div>CN</div>
+          </div>
+          <!-- Days Grid -->
+          <div
+            class="grid grid-cols-7 text-center items-center text-[13px] font-semibold text-[#482030] gap-y-1 py-1"
+          >
+            <!-- Empty Days from previous month (Nov 1 2026 starts on Sunday) -->
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <!-- Day 1 (Sunday) -->
+            <div class="h-8 flex flex-col items-center justify-center relative cursor-pointer">
+              <span class="text-[8px] text-[#FF6F91] leading-none mb-0.5">🌸</span>
+              <span>1</span>
+            </div>
+            <!-- Week 2: 2 - 8 -->
+            <div class="h-8 flex flex-col items-center justify-center relative cursor-pointer">
+              <span>1</span>
+              <span class="w-1.5 h-1 bg-[#FF8DAA] rounded-full mt-0.5"></span>
+            </div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">3</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">4</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">5</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">6</div>
+            <!-- Day 7 with small heart decoration -->
+            <div class="h-8 flex flex-col items-center justify-center relative cursor-pointer">
+              <span class="text-[9px] -mb-1 text-[#FF5B85]">🎀</span>
+              <span>7</span>
+            </div>
+            <!-- Day 8 - Selected Date in glowing bubble ring -->
+            <div class="h-8 flex items-center justify-center relative cursor-pointer">
+              <div
+                class="w-8 h-8 rounded-full border-2 border-[#FF7E9F]/70 bg-gradient-to-tr from-[#FFA5BD]/30 to-[#FFD5E1]/60 flex items-center justify-center shadow-sm"
+              >
+                <span class="text-[#3B1524] font-bold">8</span>
+              </div>
+            </div>
+            <!-- Week 3: 9 - 15 -->
+            <div class="h-8 flex items-center justify-center cursor-pointer">9</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">10</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">11</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">12</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">13</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">14</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">15</div>
+            <!-- Week 4: 16 - 22 -->
+            <div class="h-8 flex items-center justify-center cursor-pointer">16</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">17</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">18</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">29</div>
+            <!-- Day 20 with heart badge -->
+            <div class="h-8 flex items-center justify-center cursor-pointer">
+              <div
+                class="w-6 h-6 rounded-full bg-[#FF94B0] flex items-center justify-center text-white shadow-xs"
+              >
+                <svg class="w-3.5 h-3.5 fill-white" viewbox="0 0 24 24">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">21</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">22</div>
+            <!-- Week 5: 23 - 29 -->
+            <div class="h-8 flex items-center justify-center cursor-pointer">23</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">24</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">25</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">26</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">27</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">28</div>
+            <div class="h-8 flex items-center justify-center cursor-pointer">29</div>
+            <!-- Week 6: 30 -->
+            <div class="h-8 flex items-center justify-center cursor-pointer">30</div>
+          </div>
+        </section>
+        <!-- END: CalendarSection -->
+        <!-- BEGIN: EventListSection -->
+        <section class="mt-3 px-1 space-y-3.5" data-purpose="scheduled-events">
+          <!-- Event Card 1 -->
+          <article class="space-y-1.5" data-purpose="event-item">
+            <!-- Date Label -->
+            <div class="flex items-center gap-1.5 px-2 text-[#491C2C] font-bold text-xs tracking-wide">
+              <svg class="w-3.5 h-3.5 fill-[#FF5A84]" viewbox="0 0 24 24">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                ></path>
+              </svg>
+              <span>T7, 08/11</span>
+            </div>
+            <!-- Card Content -->
+            <div
+              class="bg-white/85 backdrop-blur-md rounded-2xl p-3.5 flex items-center justify-between shadow-[0_4px_16px_rgba(255,160,185,0.12)] border border-white hover:bg-white transition-all cursor-pointer"
+            >
+              <div class="flex items-center space-x-3">
+                <!-- Illustrated Heart/Gift Icon Badge -->
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFE7EE] to-[#FFD2E0] border border-[#FFB6CB] flex items-center justify-center p-2 flex-shrink-0 shadow-inner"
+                >
+                  <div
+                    class="w-7 h-7 rounded-lg bg-[#FF80A1] flex items-center justify-center text-white shadow-xs"
+                  >
+                    <svg class="w-4 h-4 fill-white" viewbox="0 0 24 24">
+                      <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <!-- Event Information -->
+                <div class="text-left">
+                  <h4 class="text-[13.5px] font-bold text-[#481B2B] flex items-center gap-1 leading-tight">
+                    <span>Hẹn hò cuối tuần</span>
+                    <span class="text-[11px] font-normal text-[#FF638B]">♡</span>
+                  </h4>
+                  <p class="text-[11px] text-[#8C6D7A] font-medium mt-0.5">14:00 – 20:00 · 3 địa điểm</p>
+                </div>
+              </div>
+              <!-- Chevron Right -->
+              <svg class="w-4 h-4 text-[#FF638B] stroke-current stroke-2 fill-none" viewbox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+          </article>
+          <!-- Event Card 2 -->
+          <article class="space-y-1.5" data-purpose="event-item">
+            <!-- Date Label -->
+            <div class="flex items-center gap-1.5 px-2 text-[#491C2C] font-bold text-xs tracking-wide">
+              <svg class="w-3.5 h-3.5 fill-[#FF5A84]" viewbox="0 0 24 24">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                ></path>
+              </svg>
+              <span>CN, 16/11</span>
+            </div>
+            <!-- Card Content -->
+            <div
+              class="bg-white/85 backdrop-blur-md rounded-2xl p-3.5 flex items-center justify-between shadow-[0_4px_16px_rgba(255,160,185,0.12)] border border-white hover:bg-white transition-all cursor-pointer"
+            >
+              <div class="flex items-center space-x-3">
+                <!-- Illustrated Movie/Ticket Icon Badge -->
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFE7EE] to-[#FFD2E0] border border-[#FFB6CB] flex items-center justify-center p-2 flex-shrink-0 shadow-inner"
+                >
+                  <div
+                    class="w-7 h-7 rounded-lg bg-[#FF80A1] flex items-center justify-center text-white shadow-xs"
+                  >
+                    <svg class="w-4 h-4 fill-white" viewbox="0 0 24 24">
+                      <path
+                        d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <!-- Event Information -->
+                <div class="text-left">
+                  <h4 class="text-[13.5px] font-bold text-[#481B2B] leading-tight">Đi xem phim</h4>
+                  <p class="text-[11px] text-[#8C6D7A] font-medium mt-0.5">19:00 – 21:30 · CGV Vincom</p>
+                </div>
+              </div>
+              <!-- Chevron Right -->
+              <svg class="w-4 h-4 text-[#FF638B] stroke-current stroke-2 fill-none" viewbox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+          </article>
+        </section>
+        <!-- END: EventListSection -->
+      </main>
+      <!-- BEGIN: FloatingActionButton -->
+      <!-- Floating '+' Button on the bottom right -->
+      <button
+        aria-label="Add new date event"
+        class="absolute bottom-[72px] right-5 w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF5483] to-[#FF7DA0] text-white flex items-center justify-center shadow-fab active:scale-95 transition-transform z-30"
+        data-purpose="fab-add-date"
+      >
+        <svg class="w-6 h-6 stroke-current stroke-[2.5]" fill="none" viewbox="0 0 24 24">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <!-- END: FloatingActionButton -->
+      <!-- BEGIN: BottomNavigationBar -->
+      <!-- Persistent 5-tab Navigation Bar -->
+      <nav
+        class="absolute bottom-0 inset-x-0 bg-white/95 backdrop-blur-lg border-t border-[#FFDCE6] px-3 pt-2 pb-5 z-20 flex justify-around items-center text-[10px]"
+        data-purpose="bottom-nav"
+      >
+        <!-- Home Tab -->
+        <button
+          class="flex flex-col items-center gap-0.5 text-[#886976] hover:text-[#FF5983] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current stroke-[1.8] fill-none" viewbox="0 0 24 24">
+            <path
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+          <span class="font-medium tracking-tight">Home</span>
+        </button>
+        <!-- Planner Tab -->
+        <button
+          class="flex flex-col items-center gap-0.5 text-[#886976] hover:text-[#FF5983] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current stroke-[1.8] fill-none" viewbox="0 0 24 24">
+            <path
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+          <span class="font-medium tracking-tight">Planner</span>
+        </button>
+        <!-- Explore Tab -->
+        <button
+          class="flex flex-col items-center gap-0.5 text-[#886976] hover:text-[#FF5983] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current stroke-[1.8] fill-none" viewbox="0 0 24 24">
+            <circle cx="12" cy="12" r="8"></circle>
+            <circle cx="12" cy="12" r="2.5"></circle>
+          </svg>
+          <span class="font-medium tracking-tight">Explore</span>
+        </button>
+        <!-- Dates Tab (Active) -->
+        <button class="flex flex-col items-center gap-0.5 text-[#FF5483]">
+          <div class="relative">
+            <svg class="w-5 h-5 stroke-current stroke-[1.8] fill-[#FFE8F0]" viewbox="0 0 24 24">
+              <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+              <line x1="16" x2="16" y1="2" y2="6"></line>
+              <line x1="8" x2="8" y1="2" y2="6"></line>
+              <line x1="3" x2="21" y1="10" y2="10"></line>
+            </svg>
+            <span
+              class="absolute top-[11px] left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#FF5483] rounded-full"
+            ></span>
+          </div>
+          <span class="font-bold tracking-tight">Dates</span>
+        </button>
+        <!-- Memories Tab -->
+        <button
+          class="flex flex-col items-center gap-0.5 text-[#886976] hover:text-[#FF5983] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current stroke-[1.8] fill-none" viewbox="0 0 24 24">
+            <path
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+          <span class="font-medium tracking-tight">Memories</span>
+        </button>
+      </nav>
+      <!-- END: BottomNavigationBar -->
+      <!-- iOS Home Indicator -->
+      <div
+        class="absolute bottom-1 inset-x-0 flex justify-center z-30 pointer-events-none"
+        data-purpose="home-indicator"
+      >
+        <div class="w-32 h-1 bg-stone-300/80 rounded-full"></div>
+      </div>
+    </div>
+    <!-- END: PhoneContainer -->
+  </body>
+</html>

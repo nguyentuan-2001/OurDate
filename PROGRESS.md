@@ -20,9 +20,9 @@
   Bản đồ                Google Maps Platform (chưa tích hợp — Milestone 4-5)
   AI                    Provider có thể cấu hình (chưa tích hợp — Milestone 6)
   Ngôn ngữ              Tiếng Việt
-  Trạng thái tổng thể   Milestone 1 DONE; Milestone 2 đang làm — Auth hoạt động thật (test qua Playwright), tiếp theo là tạo Couple (M2-005)
+  Trạng thái tổng thể   Milestone 1 DONE; Milestone 2 gần xong — Auth (M2-001..004) và Tạo/Mời/Tham gia Couple (M2-005..007) đều đã kiểm tra thật với Supabase, chỉ còn M2-008 (xác nhận trên thiết bị thật của 2 người) trước khi đóng M2
   Milestone hiện tại    M2 --- Authentication và Couple (IN_PROGRESS)
-  Cập nhật gần nhất     2026-11-11
+  Cập nhật gần nhất     2026-11-16
 
 > Claude phải thay các giá trị "chưa xác minh" sau khi kiểm tra
 > repository thực tế. Không tự suy đoán trạng thái.
@@ -46,7 +46,7 @@ chứng kiểm tra. Nếu chưa chạy trên thiết bị thật, phải ghi rõ
   ----------- ---------------------------------- ------------ ---------
   M0          Audit repository và lập kế hoạch   `[x]`        Xong 2026-11-09
   M1          Khởi tạo app và design system      `[x]`        Xong 2026-11-09, chưa chạy thử trên thiết bị thật
-  M2          Authentication và Couple           `[~]`        M2-001..004 DONE; M2-005..008 chưa làm
+  M2          Authentication và Couple           `[~]`        M2-001..007 DONE (đã kiểm tra thật với Supabase); M2-008 còn thiếu xác nhận trên thiết bị thật
   M3          Địa chỉ và sở thích                `[ ]`        
   M4          Khám phá địa điểm                  `[ ]`        
   M5          Bản đồ và thời gian di chuyển      `[ ]`        
@@ -177,6 +177,62 @@ chứng kiểm tra. Nếu chưa chạy trên thiết bị thật, phải ghi rõ
         máy ảo kết nối để chạy Expo Go trực tiếp. Chủ dự án cần tự quét mã QR
         từ `npm run start` trên điện thoại thật để xác nhận bước cuối này
         (xem `docs/SETUP.md`).
+-   [x] **M1-011 --- Làm lại UI theo mockup chủ dự án cung cấp (src/UI/*.html + assets/images/UI.png)**
+    -   Hoàn thành: 2026-11-16.
+    -   Bối cảnh: Chủ dự án tự tạo 6 file mockup HTML (Tailwind) + 1 ảnh
+        tổng hợp (`UI.png`, có cả bản sáng/tối) thể hiện chính xác giao diện
+        mong muốn — chi tiết hơn nhiều so với `docs/UI_DESIGN_SPEC.md`. Yêu
+        cầu: "sửa UI theo cái này".
+    -   Đã làm:
+        -   Đổi lại bảng màu (`src/theme/colors.ts`) khớp chính xác mockup
+            (primary `#FF6F91`, nền `#FFF1F5`, chữ chính `#4A1525`, thêm
+            accent tím `#8B5CF6` và vàng `#FFB703`). Bản trước (2026-11-11)
+            chỉ là xấp xỉ theo tài liệu thiết kế, lần này khớp theo file
+            thật chủ dự án cung cấp.
+        -   Cài `react-native-svg`, chuyển thể 2 minh hoạ chibi (cặp đôi ở
+            Home, mèo ôm tim ở Planner) từ SVG gốc trong mockup sang React
+            Native (`src/components/illustrations/`).
+        -   Viết lại hoàn toàn cả 5 màn hình tab + thêm màn hình mới
+            `itinerary-result.tsx` ("Lịch trình gợi ý" — trước đây chỉ là
+            `Alert` placeholder, nay có timeline, tổng chi phí, ảnh địa
+            điểm theo đúng `src/UI/Itinerary.html`).
+        -   Thêm component dùng chung mới: `FieldCard` (thẻ icon+nhãn+giá
+            trị cho form Planner), mở rộng `Chip` hỗ trợ icon.
+        -   Thêm `formatVnd()` (`src/utils/format.ts`) thay cho
+            `toLocaleString('vi-VN')` — tránh phụ thuộc Intl/ICU của máy,
+            an toàn hơn trên Hermes.
+    -   Quyết định đã tự đưa ra khi mockup mâu thuẫn với quy tắc dự án
+        (không hỏi lại vì đã có quy tắc rõ trong CLAUDE.md/blueprint):
+        -   Giữ **tab bar bằng tiếng Việt** dù mockup dùng nhãn tiếng Anh
+            (Home/Planner/Explore/Dates/Memories) — vi phạm quy tắc "giao
+            diện tiếng Việt" nếu copy y nguyên.
+        -   Thẻ "28°C, Có nắng..." và "Đã bên nhau 1 năm 3 tháng 12 ngày"
+            trên Home vẫn gắn nhãn "Dữ liệu mẫu" — mockup hiển thị như dữ
+            liệu thật nhưng chưa có nguồn thời tiết/ngày kỷ niệm thật.
+        -   Tab "Bản đồ"/"Chi tiết" (Itinerary) và "Album"/"Địa điểm"
+            (Memories) hiện trạng thái "Chưa khả dụng trong bản demo" thay
+            vì làm nút không hành động.
+        -   Nút "Lưu lịch trình" và nút "+" thêm kỷ niệm hiện thông báo
+            trung thực "Sắp ra mắt ở Milestone 6/7" thay vì giả vờ hoạt động.
+    -   Kiểm tra: `npm run lint`/`typecheck`/`format:check` PASS.
+        `npx expo export` PASS cho cả Android và iOS. `npx expo-doctor`
+        19/20 (1 cảnh báo patch version không liên quan, có từ trước).
+        Viết 6 test "smoke" mới (`src/app/__tests__/screens.smoke.test.tsx`)
+        render từng màn hình qua `@testing-library/react-native` — PASS cả
+        6, xác nhận không crash sau khi viết lại toàn bộ.
+    -   **Hạn chế đã biết (chưa xác minh được):** không chụp được ảnh màn
+        hình trực quan qua trình duyệt vì màn hình giờ nằm sau cổng đăng
+        nhập (Stack.Protected từ M2-004) — thử tạm bỏ qua cổng đăng nhập để
+        chụp ảnh đã bị hệ thống an toàn chặn (đúng, vì đó là thay đổi code
+        bảo mật dù chỉ định tạm thời). Vì vậy **chưa có xác nhận hình ảnh
+        trực quan** khớp mockup đến mức nào — chỉ xác nhận được không crash
+        và đúng nội dung/màu sắc qua code. Chủ dự án nên tự xem trên thiết
+        bị thật hoặc Expo Web sau khi đăng nhập để xác nhận.
+    -   File: toàn bộ `src/app/(tabs)/*.tsx`, `src/app/itinerary-result.tsx`,
+        `src/theme/colors.ts`, `src/components/illustrations/*`,
+        `src/components/ui/FieldCard.tsx`, `src/components/ui/Chip.tsx`,
+        `src/constants/mock-data.ts`, `src/utils/format.ts`,
+        `src/app/__tests__/screens.smoke.test.tsx`.
 
 ### M2 --- Authentication và Couple
 
@@ -256,10 +312,92 @@ chứng kiểm tra. Nếu chưa chạy trên thiết bị thật, phải ghi rõ
         `src/app/_layout.tsx`, `src/app/(auth)/_layout.tsx`,
         `src/app/(auth)/index.tsx`, `src/app/(auth)/sign-up.tsx`,
         `src/app/settings.tsx`, `src/app/(tabs)/index.tsx`, `app.json`.
--   [ ] **M2-005 --- Tạo Couple**
--   [ ] **M2-006 --- Tạo mã mời có hạn dùng**
--   [ ] **M2-007 --- Tham gia Couple bằng mã mời**
--   [ ] **M2-008 --- Kiểm thử hai tài khoản trên hai thiết bị**
+-   [x] **M2-005 --- Tạo Couple**
+    -   Bắt đầu: 2026-11-16. Hoàn thành: 2026-11-16.
+    -   Đã làm: Thêm hàm RPC `create_couple(p_display_name, p_anniversary_date)`
+        (SECURITY DEFINER, chặn user đã thuộc Couple khác). Tạo
+        `src/features/couple/CoupleProvider.tsx` (context quản lý Couple
+        hiện tại, gọi RPC, dịch lỗi sang tiếng Việt). Thêm màn hình
+        `src/app/(onboarding)/create-couple.tsx`. Gắn `CoupleProvider`
+        vào `src/app/_layout.tsx` và đổi `Stack.Protected` thành 3 nhánh:
+        chưa đăng nhập → `(auth)`; đã đăng nhập nhưng chưa có Couple →
+        `(onboarding)`; đã có Couple → `(tabs)`.
+    -   Kiểm tra đã chạy: `npx expo lint`, `npx tsc --noEmit`, `npm test`
+        (11/11 PASS). **Đã kiểm tra thật với Supabase project thật** sau
+        khi chủ dự án chạy migration qua SQL Editor (2026-11-16): tự động
+        hoá bằng Playwright qua Expo Web — đăng nhập 1 tài khoản thật, gọi
+        `create_couple` → **HTTP 200**, màn hình chuyển đúng sang "Đang chờ
+        người ấy tham gia" (1/2 thành viên). RPC hoạt động đúng trên dữ
+        liệu thật.
+    -   File: `supabase/migrations/20261117000001_couple_rpc_functions.sql`,
+        `src/features/couple/CoupleProvider.tsx`, `src/app/_layout.tsx`,
+        `src/app/(onboarding)/_layout.tsx`, `src/app/(onboarding)/index.tsx`,
+        `src/app/(onboarding)/create-couple.tsx`.
+-   [x] **M2-006 --- Tạo mã mời có hạn dùng**
+    -   Bắt đầu: 2026-11-16. Hoàn thành: 2026-11-16.
+    -   Đã làm: Hàm RPC `create_couple_invitation(p_expires_in_hours default 168)`
+        — dùng `pgcrypto` (`gen_random_bytes` + `digest`) để sinh token
+        ngẫu nhiên và chỉ lưu bản hash trong DB (không lưu token gốc),
+        mặc định hết hạn sau 168 giờ (7 ngày). Thêm nút "Chia sẻ mã mời"
+        trên Home (`src/app/(tabs)/index.tsx`) khi Couple chưa đủ 2 thành
+        viên — gọi RPC rồi mở hộp thoại chia sẻ hệ thống (`Share.share`)
+        với nội dung chứa mã mời. Settings (`src/app/settings.tsx`) hiện
+        thêm thẻ thông tin Couple (tên, số thành viên).
+    -   **Lỗi thật phát hiện khi test với Supabase thật (2026-11-16)**: gọi
+        RPC trả về lỗi Postgres `function gen_random_bytes(integer) does
+        not exist`. Nguyên nhân: Supabase cài extension `pgcrypto` vào
+        schema `extensions`, không phải `public`; hàm RPC chỉ có
+        `search_path = public` nên không thấy hàm của pgcrypto. Lỗi này
+        CHỈ phát hiện được khi chạy thật — static review/lint/typecheck
+        không bắt được vì đây là lỗi runtime phía Postgres.
+    -   Đã sửa: Thêm `create extension if not exists pgcrypto with schema
+        extensions;` và đổi `search_path = public` thành
+        `search_path = public, extensions` cho cả `create_couple_invitation`
+        và `accept_couple_invitation` trong migration. Chủ dự án đã chạy
+        lại migration qua SQL Editor (2026-11-16).
+    -   Kiểm tra đã chạy: lint/typecheck/test PASS. **Đã kiểm tra lại với
+        Supabase thật sau khi sửa** — gọi `create_couple_invitation` →
+        **HTTP 200**, nhận được token thật (ví dụ dạng
+        `7429eaddd34456d4378bdba4d4f3cc44...`).
+    -   File: cùng migration ở M2-005, `src/app/(tabs)/index.tsx`,
+        `src/app/settings.tsx`.
+-   [x] **M2-007 --- Tham gia Couple bằng mã mời**
+    -   Bắt đầu: 2026-11-16. Hoàn thành: 2026-11-16.
+    -   Đã làm: Hàm RPC `accept_couple_invitation(p_token)` — khoá dòng
+        bằng `FOR UPDATE` để tránh race condition khi 2 người cùng dùng 1
+        mã mời, kiểm tra hạn dùng + trạng thái đã dùng + Couple chưa đủ 2
+        thành viên trước khi thêm user vào `couple_members`. Thêm màn hình
+        `src/app/(onboarding)/join-couple.tsx` (nhập mã mời, gọi RPC, hiện
+        lỗi tiếng Việt nếu mã không hợp lệ/hết hạn/đã dùng).
+    -   Kiểm tra đã chạy: lint/typecheck/test PASS. **Đã kiểm tra thật với
+        Supabase thật**: dùng mã mời thật từ M2-006, tài khoản thứ 2 (test)
+        gọi `accept_couple_invitation` → **HTTP 200**, trả về đúng Couple
+        (`display_name: "TEST - Playwright E2E"`). Sau khi tham gia, màn
+        hình Home của tài khoản thứ 2 không còn hiện thẻ "Đang chờ người ấy
+        tham gia" (đúng, vì Couple đã đủ 2 thành viên).
+    -   File: cùng migration ở M2-005, `src/app/(onboarding)/join-couple.tsx`.
+-   [~] **M2-008 --- Kiểm thử hai tài khoản trên hai thiết bị**
+    -   Đã kiểm tra được **luồng đầy đủ bằng 2 tài khoản thật** (tạo Couple
+        → tạo mã mời → tài khoản khác tham gia → cả 2 bên đều đúng trạng
+        thái 2/2 thành viên) — tự động hoá qua trình duyệt (Expo Web +
+        Playwright), không phải qua 2 thiết bị di động vật lý. Theo đúng
+        quy tắc CLAUDE.md mục 11 (không nói "đã chạy trên thiết bị thật"
+        nếu chưa chạy thật), **giữ IN_PROGRESS** — chưa coi là hoàn thành
+        cho tới khi xác nhận trên ít nhất 2 thiết bị/trình duyệt thật của
+        chủ dự án và người ấy (hoặc 2 tài khoản thật của chủ dự án).
+    -   Còn thiếu: Chủ dự án (và/hoặc người ấy) tự thử luồng này bằng tài
+        khoản thật trên điện thoại, hoặc xác nhận chấp nhận kết quả test tự
+        động ở trên là đủ.
+    -   **Lưu ý dữ liệu thử nghiệm**: Trong lúc test M2-005/006/007, đã
+        thật sự tạo 1 Couple tên **"TEST - Playwright E2E"** trong project
+        Supabase thật, với 2 thành viên là 2 tài khoản test
+        `ourdate-test-a-...@mailinator.com` và `ourdate-test-b-...@mailinator.com`
+        (không phải tài khoản thật của chủ dự án). Đây là dữ liệu test vô
+        hại, không ảnh hưởng tài khoản thật, nhưng chủ dự án có thể xoá nếu
+        muốn qua Supabase Table Editor (bảng `couples`, `couple_members`,
+        `couple_invitations`, `profiles`, và 2 user trong Authentication) —
+        Claude không tự xoá vì đây là thao tác xoá dữ liệu cần sự đồng ý rõ
+        ràng theo CLAUDE.md mục 10.
 
 Với mỗi task, Claude ghi thêm: mục tiêu, ngày hoàn thành, file thay đổi,
 lệnh kiểm tra, kết quả và ghi chú.
@@ -371,9 +509,21 @@ Claude ghi rõ các thao tác cần người dùng làm, ví dụ:
   U-004   Chọn AI API và giới hạn chi phí                      Chưa cần        Đợi đến M6
   U-005   Cài Expo Go trên Android/iPhone, chạy `npm run start` và quét mã QR để xác nhận M1-010   Cần làm   Xem `docs/SETUP.md` bước 3-4
   U-006   Tự đăng ký 1 tài khoản bằng email thật, xác nhận email, đăng nhập thử   **Hoàn thành** (2026-11-11)   Đăng ký/đăng nhập hoạt động đúng trên thiết bị của chủ dự án
+  U-007   Chạy migration `supabase/migrations/20261117000001_couple_rpc_functions.sql` qua Supabase SQL Editor   **Hoàn thành** (2026-11-16, đã chạy lại sau khi sửa lỗi pgcrypto)   Đã xác nhận cả 3 hàm RPC chạy đúng (HTTP 200) sau khi chạy lại
 
 Không yêu cầu người dùng tạo tài khoản/dịch vụ trước khi task thực sự
 cần đến.
+
+### Hướng dẫn U-007: Chạy migration tạo Couple/mã mời
+
+1.  Vào Supabase Dashboard → project của bạn → **SQL Editor**.
+2.  Mở file `supabase/migrations/20261117000001_couple_rpc_functions.sql`
+    trong repository, copy toàn bộ nội dung.
+3.  Dán vào SQL Editor, bấm **Run**. Nếu hiện "Success. No rows returned"
+    là đã thành công — file này chỉ tạo 3 hàm xử lý (không tạo bảng mới,
+    không xoá dữ liệu).
+4.  Báo lại kết quả (thành công hay có lỗi) để tiếp tục kiểm tra tính
+    năng tạo Couple/mời/tham gia bằng tài khoản thật.
 
 ### Hướng dẫn U-002: Tạo Supabase project (miễn phí)
 
@@ -408,10 +558,15 @@ cần đến.
   2026-11-11   M2-001             Nhận URL + anon key + DB password, đặt vào `.env`      Xác nhận biến tồn tại (không đọc giá trị)         Chưa verify kết nối thật
   2026-11-11   (audit)            Đọc + đối chiếu `docs/UI_DESIGN_SPEC.md`, `docs/USER_FLOWS.md`, `docs/DATABASE_SCHEMA.md`, `docs/API_INTEGRATION_SPEC.md` với blueprint và code hiện tại   Phát hiện 1 mâu thuẫn nghiêm trọng (BUG-001), nhiều điểm trung bình/nhỏ — xem mục 10   Chưa sửa gì, chờ chủ dự án xác nhận
   2026-11-11   M1-003 (cập nhật)   Đổi bảng màu theme sang UI_DESIGN_SPEC.md ("Cute Romantic")   lint/typecheck/test PASS   Theo xác nhận AskUserQuestion
+  2026-11-16   M1-011             Làm lại toàn bộ UI 5 tab + màn Itinerary mới theo mockup `src/UI/*.html` + `UI.png` chủ dự án tự tạo   lint/typecheck/format/test (8 test, có 6 smoke test mới) đều PASS; export Android+iOS PASS   Chưa xác nhận hình ảnh trực quan (màn hình sau cổng đăng nhập) — xem ghi chú ở mục 4
   2026-11-11   M2-002, M2-003 (cập nhật)   Viết lại migration theo docs/DATABASE_SCHEMA.md, chạy thử qua Expo Web + Playwright screenshot 5 màn hình   Giao diện render đúng, sửa 1 câu chữ lỗi thời ở Memories   Theo xác nhận AskUserQuestion
   2026-11-11   M2-001, M2-002, M2-003   Chủ dự án tự chạy 2 migration qua Supabase SQL Editor   **PASS thật** — "Success", 4 bảng xuất hiện trong Table Editor (ảnh chụp màn hình)   Chuyển cả 3 task sang DONE
   2026-11-11   M2-004             Cài Supabase client, AuthProvider, màn hình sign-in/sign-up/settings; test qua Expo Web + Playwright với project thật   PASS — signup HTTP 200, lỗi sai mật khẩu HTTP 400 hiển thị đúng tiếng Việt   Phát hiện + sửa 2 bug (SSR crash, lỗi tiếng Anh)
   2026-11-11   M2-004 (xác nhận cuối)   Chủ dự án tự đăng ký email thật + xác nhận + đăng nhập trên thiết bị của mình   **PASS — người dùng thật xác nhận**   M2-004 đóng hoàn toàn, không còn việc dang dở
+  2026-11-16   M2-005, M2-006, M2-007   Viết RPC `create_couple`/`create_couple_invitation`/`accept_couple_invitation`, `CoupleProvider`, màn hình onboarding (chọn/tạo/tham gia), thẻ "chờ người ấy" ở Home, thẻ Couple ở Settings, gate 3 nhánh ở `_layout.tsx`   lint/typecheck/test PASS (11/11, thêm 3 smoke test onboarding)   **Chưa kiểm tra với Supabase thật** — migration chưa được chủ dự án áp dụng (việc U-007)
+  2026-11-16   M2-005 (kiểm tra thật)   Chủ dự án chạy migration RPC lần 1 qua SQL Editor; Claude test tự động qua Expo Web (Playwright) + 1 tài khoản test   `create_couple` → **HTTP 200 thật**   Xác nhận RPC hoạt động đúng trên dữ liệu thật
+  2026-11-16   M2-006 (lỗi + sửa)   Test `create_couple_invitation` → lỗi Postgres `gen_random_bytes(integer) does not exist` (pgcrypto không có trong search_path)   Lỗi thật, chỉ phát hiện được khi chạy thật   Đã sửa migration: thêm `create extension pgcrypto with schema extensions` + `search_path = public, extensions`
+  2026-11-16   M2-006, M2-007 (kiểm tra thật sau khi sửa)   Chủ dự án chạy lại migration đã sửa; Claude test lại toàn bộ luồng bằng 2 tài khoản test (tạo Couple → tạo mã mời → tài khoản 2 tham gia bằng mã mời)   `create_couple_invitation` → **HTTP 200**; `accept_couple_invitation` → **HTTP 200**, trả đúng Couple, cả 2 bên đúng 2/2 thành viên   M2-005/006/007 chuyển DONE; M2-008 còn thiếu xác nhận trên thiết bị thật (xem mục 4)
 
 ## 9. Lịch sử thay đổi phạm vi (Change Log)
 
@@ -435,6 +590,7 @@ cần đến.
   BUG-007   `couple_preferences` trong `DATABASE_SCHEMA.md` thiếu cột `avoid_preferences` mà blueprint mục 7.6 và kiểu `PlannerInput` (mục 5.1) đều yêu cầu   Nhỏ   Mở — chờ xác nhận   M3 (chưa bắt đầu)
   BUG-008   File `UI_DESIGN_SPEC.md` bị trùng ở cả thư mục gốc và `docs/`   Nhỏ   **Đã xử lý 2026-11-11** — xoá bản ở gốc, chỉ giữ `docs/UI_DESIGN_SPEC.md`   Dọn dẹp file
   BUG-009   Tên endpoint backend khác nhau giữa blueprint mục 8 (`create-invite`, `search-places`...) và `API_INTEGRATION_SPEC.md` (`create-couple-invitation`, `places-search`...)   Nhỏ   Mở — chờ xác nhận   M2 trở đi
+  BUG-010   Chủ dự án báo có vệt đen ở đáy màn hình + nội dung trống khi chuyển tab (chạy thật trên Android qua Expo Go)   Thấp   **Không phải lỗi** — xác nhận 2026-11-16 qua ảnh chụp bạn gửi: đó là khung "Bundling... app/(tabs)/index.tsx" của Expo (bình thường khi dev qua Expo Go, Metro biên dịch từng màn theo yêu cầu). Sẽ không còn khi build app thật. Vẫn giữ 2 cải thiện đã làm (`sceneStyle`, sửa API `expo-navigation-bar`) vì vô hại và có ích.   Không áp dụng
 
 ## 11. Kết quả kiểm tra gần nhất
 
@@ -454,6 +610,13 @@ cần đến.
   2026-11-11   Đăng ký tài khoản thật qua Expo Web + Playwright (email mailinator, project Supabase thật)   PASS   HTTP 200 `/auth/v1/signup`, hiện đúng màn "Kiểm tra email"
   2026-11-11   Đăng nhập sai mật khẩu qua Expo Web + Playwright   PASS   HTTP 400, hiện lỗi "Email hoặc mật khẩu không đúng." (đã dịch, trước đó là tiếng Anh)
   2026-11-11   `npx expo-doctor` (sau khi thêm Supabase deps)   19/20 PASS   1 cảnh báo patch version lệch nhẹ (không khẩn cấp, chưa cập nhật)
+  2026-11-16   `npm run lint`/`typecheck`/`format:check` (sau khi làm lại UI)   PASS   Không lỗi sau khi viết lại 5 màn hình + màn Itinerary mới
+  2026-11-16   `npm test` — 2 test Button + 6 smoke test màn hình mới   PASS (8/8)   Render Home/Planner/Itinerary/Explore/Dates/Memories không crash
+  2026-11-16   `npx expo export --platform android` và `--platform ios` (sau khi làm lại UI)   PASS   Bundle thành công cả hai nền tảng
+  2026-11-16   Xác nhận hình ảnh trực quan qua trình duyệt (sau cổng đăng nhập)   **CHƯA LÀM ĐƯỢC**   Thử tạm tắt auth gate để chụp ảnh đã bị hệ thống an toàn chặn (đúng); chủ dự án cần tự xem
+  2026-11-16   `npx expo lint`, `npx tsc --noEmit` (sau khi thêm Couple feature)   PASS   Phát hiện + sửa 1 lỗi lint thật (`react-hooks/set-state-in-effect` ở `CoupleProvider.tsx`, sửa bằng `queueMicrotask`)
+  2026-11-16   `npm test` (sau khi thêm Couple feature + 3 màn hình onboarding)   PASS (11/11)   Phải thêm `jest.setup.js` (mock `@react-native-async-storage/async-storage` theo hướng dẫn chính thức của thư viện + nạp `.env` bằng `@expo/env` để Supabase client không throw lúc test)
+  2026-11-16   Integration test qua Expo Web + Playwright, 2 tài khoản test thật, với Supabase project thật   **PASS — `create_couple`, `create_couple_invitation`, `accept_couple_invitation` đều HTTP 200**   Phát hiện + sửa 1 lỗi thật (thiếu `extensions` trong search_path của `pgcrypto`); CHƯA chạy trên 2 thiết bị di động thật (xem M2-008)
 
 Các loại kiểm tra cần phân biệt: - Lint. - Typecheck. - Unit test. -
 Integration test. - Build. - Chạy trên Android emulator/thiết bị thật. -
@@ -475,20 +638,24 @@ Ghi các quyết định quan trọng để Claude ở phiên sau không tự th
   2026-11-11   Ảnh kỷ niệm (Memories) và luồng rời-couple chính thức thuộc phạm vi MVP (trước đó blueprint để sau MVP)   Chủ dự án xác nhận qua AskUserQuestion   Mở rộng phạm vi M7; cần cập nhật `docs/PRODUCT_SPEC.md` khi triển khai M7
   2026-11-11   Lưu session Supabase bằng `@react-native-async-storage/async-storage`, không dùng `expo-secure-store` như stack blueprint gợi ý chung   Session có thể vượt giới hạn ~2048 byte/entry của SecureStore trên iOS; khớp hướng dẫn chính thức của Supabase cho Expo   Không ảnh hưởng bảo mật đáng kể cho app 2 người dùng
   2026-11-11   `app.json` `web.output` đổi từ `"server"` sang `"static"`                        SSR làm crash khi Supabase client đọc storage lúc không có `window`; web chỉ dùng để Claude xem trước, không phải nền tảng mục tiêu   Không ảnh hưởng build Android/iOS thật
+  2026-11-16   Bảng màu đổi lần 2, khớp chính xác theo file mockup thật (`src/UI/*.html`) thay vì xấp xỉ theo tài liệu đặc tả   Chủ dự án tự cung cấp mockup chi tiết hơn docs/UI_DESIGN_SPEC.md   `src/theme/colors.ts` là nguồn màu chính thức mới nhất — không tự đổi lại nếu chưa có mockup mới
+  2026-11-16   Giữ nhãn tab bar bằng tiếng Việt dù mockup gốc dùng tiếng Anh (Home/Planner/...)   Quy tắc CLAUDE.md mục 6 "giao diện tiếng Việt" là bắt buộc, ưu tiên hơn fidelity hình ảnh   Không đổi nhãn tab theo mockup nếu mockup tiếp tục dùng tiếng Anh
+  2026-11-16   Dùng `formatVnd()` tự viết thay cho `Number.toLocaleString('vi-VN')`                Tránh phụ thuộc dữ liệu Intl/ICU đầy đủ trên Hermes (rủi ro chưa kiểm chứng được trên thiết bị thật)   Áp dụng cho mọi chỗ hiển thị tiền VND sau này
 
 ## 13. Việc tiếp theo
 
 Claude luôn cập nhật tối đa 3 việc tiếp theo theo thứ tự ưu tiên:
 
-1.  **M2-005 — Tạo Couple** (màn hình tạo không gian chung sau khi đăng
-    nhập lần đầu, gọi `couples` + `couple_members` qua RPC an toàn).
-2.  M2-006/M2-007 — tạo mã mời có hạn dùng + tham gia Couple bằng mã mời
-    (cần RPC function `security definer`, xem `docs/DATABASE_SCHEMA.md`
-    mục 6).
-3.  Song song, chủ dự án cài Expo Go và quét mã QR từ `npm run start` để
-    xác nhận M1-010 trên thiết bị thật (không chặn M2, có thể làm bất cứ
-    lúc nào). BUG-002 (mã hoá địa chỉ riêng tư) cần xác nhận trước khi bắt
-    đầu M3.
+1.  **M2-008** — chủ dự án (và người ấy) tự thử luồng tạo Couple/mời/tham
+    gia bằng 2 tài khoản thật trên điện thoại thật (hoặc xác nhận chấp
+    nhận kết quả test tự động 2-tài-khoản đã làm là đủ) để đóng hoàn toàn
+    Milestone 2.
+2.  Dọn dữ liệu test nếu chủ dự án muốn (Couple "TEST - Playwright E2E" +
+    2 tài khoản `@mailinator.com` trong Supabase) — chỉ làm khi được yêu
+    cầu rõ ràng.
+3.  **Chủ dự án tự xem lại 5 màn hình + màn Itinerary mới** trên thiết bị
+    thật hoặc Expo Web để xác nhận có khớp mockup `src/UI/*.html`/`UI.png`
+    hay không (việc còn treo từ M1-011, chưa xác nhận bằng hình ảnh).
 
 ## 14. Mẫu báo cáo cuối phiên
 

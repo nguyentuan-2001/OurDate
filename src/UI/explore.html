@@ -1,0 +1,443 @@
+<!doctype html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Khám phá - Our Date</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                pink: '#FF6F91',
+                'pink-light': '#FFD6E5',
+                'pink-cream': '#FFF1F5',
+                purple: '#8B5CF6',
+                yellow: '#FFB703',
+                dark: '#381C26',
+              },
+            },
+            fontFamily: {
+              sans: [
+                '-apple-system',
+                'BlinkMacSystemFont',
+                '"SF Pro Text"',
+                '"SF Pro Display"',
+                'Segoe UI',
+                'Roboto',
+                'Helvetica',
+                'Arial',
+                'sans-serif',
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style data-purpose="custom-scrollbars-and-resets">
+      /* Hide scrollbars for neat mobile preview */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-[#f0e7eb] flex items-center justify-center min-h-screen p-0 sm:p-4 text-slate-800 antialiased font-sans select-none"
+  >
+    <!-- BEGIN: PhoneShellContainer -->
+    <!-- Mimicking iPhone 14/15 Pro frame with rounded corners and warm glow -->
+    <main
+      class="w-[390px] h-[844px] bg-[#FFF1F5] rounded-[48px] shadow-[0_25px_60px_-15px_rgba(255,111,145,0.3)] relative overflow-hidden flex flex-col border-[8px] border-[#FFF1F5] ring-1 ring-pink-200/50"
+    >
+      <!-- BEGIN: iOSStatusBar -->
+      <header
+        class="pt-3 px-7 pb-1 flex justify-between items-center text-[15px] font-semibold text-slate-900 shrink-0 z-20"
+      >
+        <!-- Time -->
+        <span>9:41</span>
+        <!-- Dynamic Island / Speaker notch simulation (minimal) -->
+        <div class="w-24 h-4 bg-transparent"></div>
+        <!-- System Icons -->
+        <div class="flex items-center space-x-1.5 text-slate-900">
+          <!-- Cellular Signal -->
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24">
+            <path d="M2 17h3v4H2v-4zm6-5h3v9H8v-9zm6-5h3v14h-3V7zm6-4h3v18h-3V3z"></path>
+          </svg>
+          <!-- Wifi -->
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24">
+            <path
+              d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98A17.9 17.9 0 0012 4zm0 3c3.86 0 7.37 1.48 10.02 3.93L12 18.06 1.98 10.93A14.94 14.94 0 0112 7z"
+            ></path>
+          </svg>
+          <!-- Battery Icon -->
+          <div class="w-6 h-3 border border-slate-900 rounded-[4px] p-0.5 flex items-center">
+            <div class="h-full w-full bg-slate-900 rounded-[1.5px]"></div>
+          </div>
+        </div>
+      </header>
+      <!-- END: iOSStatusBar -->
+      <!-- BEGIN: TopAppHeader -->
+      <div class="px-6 py-2 flex items-center justify-between shrink-0 relative">
+        <div class="w-7"></div>
+        <!-- Spacer for center alignment -->
+        <!-- Title with Heart -->
+        <h1 class="text-[21px] font-bold text-[#4A1D2B] tracking-tight flex items-center gap-1.5">
+          <span>Khám phá</span>
+          <svg class="w-4 h-4 fill-[#FF6F91] inline-block" viewbox="0 0 24 24">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            ></path>
+          </svg>
+        </h1>
+        <!-- Filter / Sparkle icon button -->
+        <button
+          aria-label="Bộ lọc"
+          class="w-7 h-7 flex items-center justify-center text-[#FF6F91] hover:opacity-80 transition-opacity"
+        >
+          <svg
+            class="w-5 h-5 stroke-[#FF6F91]"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.2"
+            viewbox="0 0 24 24"
+          >
+            <circle cx="12" cy="5" fill="#FF6F91" r="1.5"></circle>
+            <path d="M12 6.5v11"></path>
+            <circle cx="12" cy="19" fill="#FF6F91" r="1.5"></circle>
+            <path d="M8 12h8"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- END: TopAppHeader -->
+      <!-- BEGIN: ScrollablePageContent -->
+      <div class="flex-1 overflow-y-auto no-scrollbar px-5 pb-24 space-y-4">
+        <!-- Search Bar Row -->
+        <section class="flex items-center gap-2.5 pt-1" data-purpose="search-bar">
+          <div
+            class="flex-1 h-11 bg-white/80 backdrop-blur-sm rounded-full flex items-center px-4 shadow-[0_2px_8px_rgba(255,182,193,0.2)] border border-pink-100/60 focus-within:ring-2 focus-within:ring-brand-pink/40 transition"
+          >
+            <svg
+              class="w-4 h-4 text-gray-400 mr-2.5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              viewbox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+            </svg>
+            <input
+              class="bg-transparent border-0 p-0 text-[13px] text-gray-700 placeholder-gray-400 focus:ring-0 w-full"
+              placeholder="Tìm quán ăn, café, địa điểm..."
+              type="text"
+            />
+          </div>
+          <!-- Filter Action Button -->
+          <button
+            aria-label="Tùy chọn tìm kiếm"
+            class="w-11 h-11 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-[#FF6F91] shadow-[0_2px_8px_rgba(255,182,193,0.2)] border border-pink-100/60 hover:bg-white active:scale-95 transition"
+          >
+            <svg
+              class="w-5 h-5 text-[#FF6F91]"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+            >
+              <line x1="4" x2="20" y1="7" y2="7"></line>
+              <line x1="7" x2="17" y1="12" y2="12"></line>
+              <line x1="10" x2="14" y1="17" y2="17"></line>
+              <circle cx="15" cy="12" fill="#FF6F91" r="1.5"></circle>
+            </svg>
+          </button>
+        </section>
+        <!-- Category Filter Pills -->
+        <section class="flex justify-between items-center gap-2 pt-1" data-purpose="category-pills">
+          <!-- Cafe -->
+          <div
+            class="flex-1 bg-white/90 rounded-2xl py-2.5 flex flex-col items-center justify-center shadow-sm border border-pink-50 cursor-pointer active:scale-95 transition"
+          >
+            <div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center mb-1">
+              <span class="text-lg">☕</span>
+            </div>
+            <span class="text-[11px] font-medium text-slate-700">Café</span>
+          </div>
+          <!-- Nhà hàng -->
+          <div
+            class="flex-1 bg-white/90 rounded-2xl py-2.5 flex flex-col items-center justify-center border border-pink-50 shadow-sm cursor-pointer active:scale-95 transition"
+          >
+            <div class="w-9 h-9 rounded-xl bg-pink-50 flex items-center justify-center mb-1">
+              <span class="text-lg text-pink-500">🍴</span>
+            </div>
+            <span class="text-[11px] font-medium text-slate-700">Nhà hàng</span>
+          </div>
+          <!-- Chụp ảnh -->
+          <div
+            class="flex-1 bg-white/90 rounded-2xl py-2.5 flex flex-col items-center justify-center border border-pink-50 shadow-sm cursor-pointer active:scale-95 transition"
+          >
+            <div class="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center mb-1">
+              <span class="text-lg">📷</span>
+            </div>
+            <span class="text-[11px] font-medium text-slate-700">Chụp ảnh</span>
+          </div>
+          <!-- Vui chơi (Active Card) -->
+          <div
+            class="flex-1 bg-amber-50/70 rounded-2xl py-2.5 flex flex-col items-center justify-center border border-amber-200/80 shadow-sm cursor-pointer active:scale-95 transition"
+          >
+            <div class="w-9 h-9 rounded-xl bg-amber-100/70 flex items-center justify-center mb-1">
+              <span class="text-lg text-amber-500">🪷</span>
+            </div>
+            <span class="text-[11px] font-semibold text-amber-900">Vui chơi</span>
+          </div>
+        </section>
+        <!-- BEGIN: NearestSection -->
+        <section class="pt-2" data-purpose="nearest-places">
+          <div class="flex items-center justify-between mb-2.5">
+            <h2 class="text-[16px] font-bold text-[#3B1724] tracking-tight">Gần bạn nhất</h2>
+            <a class="text-[12px] font-medium text-[#FF6F91] hover:underline" href="#">Xem tất cả</a>
+          </div>
+          <!-- List of Places Cards -->
+          <div class="space-y-3">
+            <!-- Card 1: Café Mây -->
+            <article
+              class="bg-white rounded-2xl p-2.5 flex items-center shadow-[0_4px_16px_rgba(255,182,193,0.15)] border border-pink-100/40 relative"
+            >
+              <img
+                alt="Café Mây"
+                class="w-20 h-20 rounded-xl object-cover shrink-0"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgAjUW5MhPs8nMKCKVPDcKRq3c1x3hsp6_Zi-mHSTrml65VrUpbgG_dCJsz4O1g37--XJZ0ZylQsWdr5xUP-GHz6aVWf-oyvzn91bwcSpII4NQOpG9Etf1cT2Zxdmas2M-U2_dWtN_HSdPKcaItPd49sCCThBM7hQSXU9SlxXuDqzyeeYHuSrI9cvaAw9_VXaR1hOWlBNUZL74X8se7E0CfaaAS14nnVydLctmAEA3"
+              />
+              <div class="ml-3.5 flex-1 pr-6">
+                <h3 class="font-bold text-[14.5px] text-slate-800 leading-tight">Café Mây</h3>
+                <div class="flex items-center text-[12px] text-slate-500 mt-1">
+                  <span class="text-amber-500 mr-1 text-[13px]">★</span>
+                  <span class="font-semibold text-slate-700 mr-1">4.8</span>
+                  <span>(1.2k)</span>
+                  <span class="mx-1.5">·</span>
+                  <span>1.2 km</span>
+                </div>
+                <p class="text-[11.5px] text-slate-400 mt-1 font-normal">Café · Không gian chill</p>
+              </div>
+              <!-- Favorite button -->
+              <button
+                aria-label="Yêu thích"
+                class="absolute top-3.5 right-3 text-slate-400 hover:text-brand-pink transition"
+              >
+                <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  ></path>
+                </svg>
+              </button>
+            </article>
+            <!-- Card 2: Nhà hàng Lá -->
+            <article
+              class="bg-white rounded-2xl p-2.5 flex items-center shadow-[0_4px_16px_rgba(255,182,193,0.15)] border border-pink-100/40 relative"
+            >
+              <img
+                alt="Nhà hàng Lá"
+                class="w-20 h-20 rounded-xl object-cover shrink-0"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpIDbphVWBrs6I_ejXlnFPWCAX7ajYBdmqhd_hfAFPojbuVNbe_m_pG0t4bSlQjdH3qweUNDKX2pxo50u_iogEuYWe0L7dBmbYe3hnQ1ZmN41LKxhvruxY6oeN8DC1sanDjPm-6r1z9qbBAs9GPV_s3FDTaPpy9CxRfwXGCydp9mgscUf65BxOe41PuyzRRGo7hWVr82UIG4u0dYAfLguE3DQSfDJ4IQtNZW0bHfo7"
+              />
+              <div class="ml-3.5 flex-1 pr-6">
+                <h3 class="font-bold text-[14.5px] text-slate-800 leading-tight">Nhà hàng Lá</h3>
+                <div class="flex items-center text-[12px] text-slate-500 mt-1">
+                  <span class="text-amber-500 mr-1 text-[13px]">★</span>
+                  <span class="font-semibold text-slate-700 mr-1">4.7</span>
+                  <span>(890)</span>
+                  <span class="mx-1.5">·</span>
+                  <span>2.1 km</span>
+                </div>
+                <p class="text-[11.5px] text-slate-400 mt-1 font-normal">Ẩm thực · Lãng mạn</p>
+              </div>
+              <!-- Favorite button -->
+              <button
+                aria-label="Yêu thích"
+                class="absolute top-3.5 right-3 text-slate-400 hover:text-brand-pink transition"
+              >
+                <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  ></path>
+                </svg>
+              </button>
+            </article>
+            <!-- Card 3: Công viên Yên Sở -->
+            <article
+              class="bg-white rounded-2xl p-2.5 flex items-center shadow-[0_4px_16px_rgba(255,182,193,0.15)] border border-pink-100/40 relative"
+            >
+              <img
+                alt="Công viên Yên Sở"
+                class="w-20 h-20 rounded-xl object-cover shrink-0"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUwOVi39FUjkY3B7fWOikePLUKV35_woAMGfOwGYrWRqzIqE7mUte-zwuOpTDQj4TPZb0Wli3HWckOIowyrrTYwHNpJOSpwfLWN0oYezPFfODrz7HRXQDb32RSqmM8uH4T2BuKauNZ8UHrBBKB7C9f98Wqb22xn55zJrokKgdPNZFADTz6U3iAsniIJHV_XbXzRg2SjtIE-r77cXDp4zd-tGAQ5Lqu_D_f3jAFkt3H"
+              />
+              <div class="ml-3.5 flex-1 pr-6">
+                <h3 class="font-bold text-[14.5px] text-slate-800 leading-tight">Công viên Yên Sở</h3>
+                <div class="flex items-center text-[12px] text-slate-500 mt-1">
+                  <span class="text-amber-500 mr-1 text-[13px]">★</span>
+                  <span class="font-semibold text-slate-700 mr-1">4.6</span>
+                  <span>(3.4k)</span>
+                  <span class="mx-1.5">·</span>
+                  <span>3.8 km</span>
+                </div>
+                <p class="text-[11.5px] text-slate-400 mt-1 font-normal">Đi dạo · Cảnh đẹp</p>
+              </div>
+              <!-- Favorite button -->
+              <button
+                aria-label="Yêu thích"
+                class="absolute top-3.5 right-3 text-slate-400 hover:text-brand-pink transition"
+              >
+                <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  ></path>
+                </svg>
+              </button>
+            </article>
+          </div>
+        </section>
+        <!-- END: NearestSection -->
+        <!-- BEGIN: MapSection -->
+        <section class="pt-1" data-purpose="map-preview">
+          <div class="flex items-center gap-1.5 mb-2.5">
+            <h2 class="text-[15.5px] font-bold text-[#3B1724]">Khám phá trên bản đồ</h2>
+            <svg
+              class="w-4 h-4 text-[#FF6F91] stroke-current fill-none inline-block"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              ></path>
+            </svg>
+          </div>
+          <!-- Stylized Map Preview Card -->
+          <div
+            class="relative w-full h-24 rounded-2xl overflow-hidden shadow-sm border border-pink-100/60 bg-[#eef5ee]"
+          >
+            <!-- Vector Map Background Art -->
+            <svg class="w-full h-full object-cover" preserveaspectratio="none" viewbox="0 0 350 100">
+              <!-- Green areas / parks -->
+              <path d="M-10,0 L120,0 L90,60 L-10,80 Z" fill="#dceddc"></path>
+              <path d="M230,100 L360,60 L360,100 Z" fill="#dceddc"></path>
+              <circle cx="230" cy="70" fill="#e1f0e1" r="16"></circle>
+              <!-- Water river curve -->
+              <path
+                d="M260,100 C280,85 300,80 320,65 C340,50 360,60 370,55"
+                fill="none"
+                stroke="#cae5f2"
+                stroke-linecap="round"
+                stroke-width="8"
+              ></path>
+              <!-- Main road grid in pastel white/cream -->
+              <line stroke="#ffffff" stroke-width="7" x1="-20" x2="160" y1="95" y2="-10"></line>
+              <line stroke="#ffffff" stroke-width="6" x1="140" x2="320" y1="110" y2="-10"></line>
+              <line stroke="#ffffff" stroke-width="4.5" x1="30" x2="360" y1="20" y2="90"></line>
+              <line stroke="#ffffff" stroke-width="3" x1="180" x2="270" y1="20" y2="110"></line>
+              <line stroke="#ffffff" stroke-width="3" x1="0" x2="200" y1="70" y2="40"></line>
+            </svg>
+            <!-- Heart Map Pin 1 -->
+            <div
+              class="absolute bottom-3 left-28 transform -translate-x-1/2 flex flex-col items-center drop-shadow-md"
+            >
+              <div
+                class="w-6 h-6 rounded-full bg-[#FF6F91] border-2 border-white flex items-center justify-center text-white text-[10px]"
+              >
+                <svg class="w-3.5 h-3.5 fill-white" viewbox="0 0 24 24">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="w-1.5 h-1 bg-[#FF6F91]/50 rounded-full mt-0.5"></div>
+            </div>
+            <!-- Heart Map Pin 2 -->
+            <div class="absolute top-2 right-16 transform flex flex-col items-center drop-shadow-md">
+              <div
+                class="w-6 h-6 rounded-full bg-[#FF6F91] border-2 border-white flex items-center justify-center text-white text-[10px]"
+              >
+                <svg class="w-3.5 h-3.5 fill-white" viewbox="0 0 24 24">
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="w-1.5 h-1 bg-[#FF6F91]/50 rounded-full mt-0.5"></div>
+            </div>
+          </div>
+        </section>
+        <!-- END: MapSection -->
+      </div>
+      <!-- END: ScrollablePageContent -->
+      <!-- BEGIN: PersistentBottomNavigation -->
+      <nav
+        class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md pt-2.5 pb-6 border-t border-pink-100 flex justify-around items-center z-30"
+      >
+        <!-- Nav Item: Home -->
+        <a class="flex flex-col items-center text-slate-500 hover:text-slate-800 transition" href="#">
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+            <path
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            ></path>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Home</span>
+        </a>
+        <!-- Nav Item: Planner -->
+        <a class="flex flex-col items-center text-slate-500 hover:text-slate-800 transition" href="#">
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"
+            ></path>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Planner</span>
+        </a>
+        <!-- Nav Item: Explore (ACTIVE) -->
+        <a class="flex flex-col items-center text-[#FF6F91]" href="#">
+          <!-- Active highlight compass/ring circle -->
+          <div class="relative flex items-center justify-center">
+            <div class="w-5 h-5 rounded-full border-2 border-[#FF6F91] flex items-center justify-center">
+              <div class="w-2 h-2 rounded-full bg-[#FF6F91]"></div>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold mt-1 text-[#FF6F91]">Explore</span>
+        </a>
+        <!-- Nav Item: Dates -->
+        <a class="flex flex-col items-center text-slate-500 hover:text-slate-800 transition" href="#">
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+            <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+            <line x1="16" x2="16" y1="2" y2="6"></line>
+            <line x1="8" x2="8" y1="2" y2="6"></line>
+            <line x1="3" x2="21" y1="10" y2="10"></line>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Dates</span>
+        </a>
+        <!-- Nav Item: Memories -->
+        <a class="flex flex-col items-center text-slate-500 hover:text-slate-800 transition" href="#">
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="1.8" viewbox="0 0 24 24">
+            <rect height="14" rx="2" ry="2" width="20" x="2" y="7"></rect>
+            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
+            <polyline points="9 13 11 15 15 11"></polyline>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Memories</span>
+        </a>
+      </nav>
+      <!-- END: PersistentBottomNavigation -->
+      <!-- iOS Home Indicator bar -->
+      <div
+        class="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-slate-300 rounded-full z-40 pointer-events-none"
+      ></div>
+    </main>
+    <!-- END: PhoneShellContainer -->
+  </body>
+</html>

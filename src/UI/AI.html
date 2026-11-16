@@ -1,0 +1,405 @@
+<!doctype html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Our Date - AI Date Planner</title>
+    <!-- Tailwind CSS CDN with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts: Quicksand for cute romantic mobile UI -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&amp;family=Nunito:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script data-purpose="tailwind-config">
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'rose-main': '#FF6F91',
+              'rose-light': '#FFD6E5',
+              'cream-pink': '#FFF1F5',
+              burgundy: '#4A1525',
+              'burgundy-light': '#8A4A5E',
+              'card-border': '#FFE4ED',
+            },
+            fontFamily: {
+              sans: ['Quicksand', 'Nunito', 'sans-serif'],
+            },
+            boxShadow: {
+              'card-soft': '0 4px 18px -2px rgba(255, 111, 145, 0.1)',
+              'btn-glow': '0 8px 20px -4px rgba(255, 111, 145, 0.45)',
+            },
+          },
+        },
+      };
+    </script>
+    <style data-purpose="base-styling">
+      body {
+        background-color: #f7e9ed;
+        font-family: 'Quicksand', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Hide scrollbars for slick mobile look */
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+    <!-- BEGIN: MobileContainer -->
+    <!-- iPhone viewport framed mockup -->
+    <div
+      class="relative w-full max-w-[390px] h-[844px] bg-[#FFF1F5] sm:rounded-[44px] shadow-2xl overflow-hidden flex flex-col justify-between border-[6px] border-white/60"
+    >
+      <!-- BEGIN: TopStatusBar -->
+      <header class="pt-3 px-7 flex items-center justify-between text-[#2D0C15] select-none z-20">
+        <!-- iOS Time -->
+        <span class="font-bold text-[14px] tracking-tight">9:41</span>
+        <!-- iOS Status Icons -->
+        <div class="flex items-center space-x-1.5 text-xs text-[#2D0C15]">
+          <i class="fa-solid fa-signal text-[11px]"></i>
+          <i class="fa-solid fa-wifi text-[11px]"></i>
+          <i class="fa-solid fa-battery-full text-[13px]"></i>
+        </div>
+      </header>
+      <!-- END: TopStatusBar -->
+      <!-- BEGIN: TopNavigationIndicator -->
+      <div class="px-6 pt-1 pb-1 flex items-center justify-between z-10">
+        <div class="w-6"></div>
+        <!-- Balance spacing -->
+        <!-- Story / Step Indicators -->
+        <div class="flex items-center space-x-1.5">
+          <span class="w-7 h-1.5 rounded-full bg-[#FF6F91]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#FF6F91]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#FFD6E5]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#FFD6E5]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#FFD6E5]"></span>
+        </div>
+        <!-- Options Menu -->
+        <button
+          aria-label="Tùy chọn"
+          class="text-burgundy/70 hover:text-burgundy p-1 text-sm focus:outline-none"
+        >
+          <i class="fa-solid fa-ellipsis-vertical text-lg"></i>
+        </button>
+      </div>
+      <!-- END: TopNavigationIndicator -->
+      <!-- BEGIN: MainContentScrollArea -->
+      <main class="flex-1 overflow-y-auto px-5 pt-1 pb-4 flex flex-col justify-between">
+        <!-- BEGIN: HeroHeader -->
+        <section class="relative mt-1 mb-2" data-purpose="hero-section">
+          <div class="flex items-start justify-between">
+            <div class="pr-2 max-w-[210px]">
+              <h1
+                class="text-[26px] font-extrabold text-burgundy tracking-tight leading-tight flex items-center gap-1.5"
+              >
+                AI Date Planner
+                <span class="text-[#FF8DA8] text-xl">✨</span>
+              </h1>
+              <p class="text-[12.5px] font-semibold text-[#8C5363] mt-2 leading-relaxed">
+                Để <span class="font-bold text-burgundy">Our Date</span> lên kế hoạch hẹn hò hoàn hảo cho hai
+                bạn nhé! <span class="text-rose-main">♡</span>
+              </p>
+            </div>
+            <!-- Cute Kitten Illustration -->
+            <div class="relative w-24 h-24 -mt-2 -mr-1 flex-shrink-0 animate-pulse-subtle">
+              <svg class="w-full h-full drop-shadow-md overflow-visible" viewbox="0 0 120 120">
+                <defs>
+                  <lineargradient id="heartGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FF8DA8"></stop>
+                    <stop offset="100%" stop-color="#FF527B"></stop>
+                  </lineargradient>
+                  <radialgradient cx="50%" cy="50%" id="blushGrad" r="50%">
+                    <stop offset="0%" stop-color="#FF9EAA" stop-opacity="0.8"></stop>
+                    <stop offset="100%" stop-color="#FF9EAA" stop-opacity="0"></stop>
+                  </radialgradient>
+                </defs>
+                <!-- Cat Ears -->
+                <path
+                  d="M28,45 L15,15 Q30,22 45,28 Z"
+                  fill="#FFFFFF"
+                  stroke="#4A1525"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                ></path>
+                <path d="M25,40 L18,20 Q28,25 38,30 Z" fill="#FFCCD8"></path>
+                <path
+                  d="M72,28 Q87,22 102,15 L89,45 Z"
+                  fill="#FFFFFF"
+                  stroke="#4A1525"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                ></path>
+                <path d="M79,30 Q89,25 99,20 L92,40 Z" fill="#FFCCD8"></path>
+                <!-- Cat Head -->
+                <ellipse
+                  cx="58"
+                  cy="52"
+                  fill="#FFFFFF"
+                  rx="42"
+                  ry="34"
+                  stroke="#4A1525"
+                  stroke-width="2.5"
+                ></ellipse>
+                <!-- Cat Eyes (closed happy cute eyes) -->
+                <path
+                  d="M38,48 Q44,43 50,48"
+                  fill="none"
+                  stroke="#4A1525"
+                  stroke-linecap="round"
+                  stroke-width="2.8"
+                ></path>
+                <path
+                  d="M66,48 Q72,43 78,48"
+                  fill="none"
+                  stroke="#4A1525"
+                  stroke-linecap="round"
+                  stroke-width="2.8"
+                ></path>
+                <!-- Pink Cheeks (Blush) -->
+                <circle cx="34" cy="56" fill="url(#blushGrad)" r="8"></circle>
+                <circle cx="82" cy="56" fill="url(#blushGrad)" r="8"></circle>
+                <!-- Cute Mouth & Nose -->
+                <circle cx="58" cy="53" fill="#FF6F91" r="2"></circle>
+                <path
+                  d="M54,56 Q58,60 62,56"
+                  fill="none"
+                  stroke="#4A1525"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                ></path>
+                <!-- Paws Holding Heart -->
+                <g transform="translate(18, 52)">
+                  <!-- Heart -->
+                  <path
+                    d="M40,24 C40,24 22,0 8,14 C-4,26 4,44 40,66 C76,44 84,26 72,14 C58,0 40,24 40,24 Z"
+                    fill="url(#heartGrad)"
+                    filter="drop-shadow(0 2px 5px rgba(255,111,145,0.4))"
+                    stroke="#FFFFFF"
+                    stroke-width="2"
+                  ></path>
+                  <!-- Left Cute Paw -->
+                  <ellipse
+                    cx="14"
+                    cy="32"
+                    fill="#FFFFFF"
+                    rx="9"
+                    ry="8"
+                    stroke="#4A1525"
+                    stroke-width="2"
+                    transform="rotate(-20 14 32)"
+                  ></ellipse>
+                  <!-- Right Cute Paw -->
+                  <ellipse
+                    cx="66"
+                    cy="32"
+                    fill="#FFFFFF"
+                    rx="9"
+                    ry="8"
+                    stroke="#4A1525"
+                    stroke-width="2"
+                    transform="rotate(20 66 32)"
+                  ></ellipse>
+                </g>
+                <!-- Sparkles near Cat -->
+                <path
+                  d="M102,12 Q103,16 107,17 Q103,18 102,22 Q101,18 97,17 Q101,16 102,12 Z"
+                  fill="#FFAEC0"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </section>
+        <!-- END: HeroHeader -->
+        <!-- BEGIN: FormSelectionCards -->
+        <section class="space-y-2.5" data-purpose="input-cards">
+          <!-- Card 1: Ngày đi -->
+          <button
+            class="w-full bg-white/95 rounded-2xl p-3 px-4 flex items-center justify-between border border-card-border shadow-card-soft active:scale-[0.99] transition-transform text-left"
+          >
+            <div class="flex items-center space-x-3.5">
+              <div
+                class="w-10 h-10 rounded-xl bg-[#FFF0F4] border border-[#FFD9E4] flex items-center justify-center text-rose-main text-lg shadow-sm"
+              >
+                <i class="fa-regular fa-calendar-days"></i>
+              </div>
+              <div>
+                <p class="text-[11px] font-bold text-[#9E6374]">Ngày đi</p>
+                <p class="text-[14px] font-bold text-burgundy tracking-tight">T7, 08/11/2026</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-[#C59AA7] pr-1"></i>
+          </button>
+          <!-- Card 2: Thời gian -->
+          <button
+            class="w-full bg-white/95 rounded-2xl p-3 px-4 flex items-center justify-between border border-card-border shadow-card-soft active:scale-[0.99] transition-transform text-left"
+          >
+            <div class="flex items-center space-x-3.5">
+              <div
+                class="w-10 h-10 rounded-xl bg-[#FFF0F4] border border-[#FFD9E4] flex items-center justify-center text-rose-main text-lg shadow-sm"
+              >
+                <i class="fa-regular fa-clock"></i>
+              </div>
+              <div>
+                <p class="text-[11px] font-bold text-[#9E6374]">Thời gian</p>
+                <p class="text-[14px] font-bold text-burgundy tracking-tight">14:00 – 20:00</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-[#C59AA7] pr-1"></i>
+          </button>
+          <!-- Card 3: Ngân sách -->
+          <button
+            class="w-full bg-white/95 rounded-2xl p-3 px-4 flex items-center justify-between border border-card-border shadow-card-soft active:scale-[0.99] transition-transform text-left"
+          >
+            <div class="flex items-center space-x-3.5">
+              <div
+                class="w-10 h-10 rounded-xl bg-[#FFF0F4] border border-[#FFD9E4] flex items-center justify-center text-rose-main text-lg shadow-sm"
+              >
+                <i class="fa-solid fa-coins"></i>
+              </div>
+              <div>
+                <p class="text-[11px] font-bold text-[#9E6374]">Ngân sách</p>
+                <p class="text-[14px] font-bold text-burgundy tracking-tight">500.000đ</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-[#C59AA7] pr-1"></i>
+          </button>
+          <!-- Card 4: Phương tiện -->
+          <button
+            class="w-full bg-white/95 rounded-2xl p-3 px-4 flex items-center justify-between border border-card-border shadow-card-soft active:scale-[0.99] transition-transform text-left"
+          >
+            <div class="flex items-center space-x-3.5">
+              <div
+                class="w-10 h-10 rounded-xl bg-[#FFF0F4] border border-[#FFD9E4] flex items-center justify-center text-rose-main text-lg shadow-sm"
+              >
+                <!-- Custom Vespa/Scooter Icon via FontAwesome -->
+                <i class="fa-solid fa-motorcycle"></i>
+              </div>
+              <div>
+                <p class="text-[11px] font-bold text-[#9E6374]">Phương tiện</p>
+                <p class="text-[14px] font-bold text-burgundy tracking-tight">Xe máy</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-[#C59AA7] pr-1"></i>
+          </button>
+        </section>
+        <!-- END: FormSelectionCards -->
+        <!-- BEGIN: TagSelectionSection -->
+        <section class="mt-3" data-purpose="preferences-section">
+          <h2 class="text-[13px] font-bold text-burgundy mb-2.5">
+            Sở thích <span class="font-normal text-[#965A6C] text-[12px]">(chọn nhiều)</span>
+          </h2>
+          <!-- Tags Grid / Pills -->
+          <div class="grid grid-cols-3 gap-2">
+            <!-- Tag 1: Ăn uống (Selected / Active) -->
+            <button
+              class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full bg-[#FFD7E4] border border-[#FFA5BF] text-burgundy text-[12.5px] font-bold shadow-sm active:scale-95 transition"
+            >
+              <span class="text-rose-main text-[11px]"><i class="fa-solid fa-utensils"></i></span>
+              <span>Ăn uống</span>
+            </button>
+            <!-- Tag 2: Café -->
+            <button
+              class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full bg-[#FFEBF1] hover:bg-[#FFDFEB] border border-[#FFD5E2] text-burgundy text-[12.5px] font-bold shadow-sm active:scale-95 transition"
+            >
+              <span class="text-[#D15175] text-[12px]"><i class="fa-solid fa-mug-saucer"></i></span>
+              <span>Café</span>
+            </button>
+            <!-- Tag 3: Chụp ảnh -->
+            <button
+              class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full bg-[#FFEBF1] hover:bg-[#FFDFEB] border border-[#FFD5E2] text-burgundy text-[12.5px] font-bold shadow-sm active:scale-95 transition"
+            >
+              <span class="text-[#D15175] text-[11px]"><i class="fa-solid fa-camera"></i></span>
+              <span>Chụp ảnh</span>
+            </button>
+            <!-- Tag 4: Đi dạo -->
+            <button
+              class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full bg-[#FFEBF1] hover:bg-[#FFDFEB] border border-[#FFD5E2] text-burgundy text-[12.5px] font-bold shadow-sm active:scale-95 transition"
+            >
+              <span class="text-[#D15175] text-[11px]"
+                ><i class="fa-solid fa-shoe-prints -rotate-90"></i
+              ></span>
+              <span>Đi dạo</span>
+            </button>
+            <!-- Tag 5: Vui chơi -->
+            <button
+              class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full bg-[#FFEBF1] hover:bg-[#FFDFEB] border border-[#FFD5E2] text-burgundy text-[12.5px] font-bold shadow-sm active:scale-95 transition"
+            >
+              <span class="text-[#D15175] text-[11px]"><i class="fa-solid fa-gamepad"></i></span>
+              <span>Vui chơi</span>
+            </button>
+            <!-- Tag 6: Xem phim -->
+            <button
+              class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-full bg-[#FFEBF1] hover:bg-[#FFDFEB] border border-[#FFD5E2] text-burgundy text-[12.5px] font-bold shadow-sm active:scale-95 transition"
+            >
+              <span class="text-[#D15175] text-[11px]"><i class="fa-solid fa-film"></i></span>
+              <span>Xem phim</span>
+            </button>
+          </div>
+        </section>
+        <!-- END: TagSelectionSection -->
+        <!-- BEGIN: ActionButtonSection -->
+        <section class="mt-4 mb-1" data-purpose="cta-section">
+          <button
+            class="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#FF7A9C] via-[#FF6288] to-[#FF547D] text-white font-bold text-[15px] flex items-center justify-center space-x-2 shadow-btn-glow active:scale-[0.98] transition-all hover:brightness-105"
+          >
+            <span class="text-lg">✨</span>
+            <span>Tạo lịch trình bằng AI</span>
+          </button>
+        </section>
+        <!-- END: ActionButtonSection -->
+      </main>
+      <!-- END: MainContentScrollArea -->
+      <!-- BEGIN: BottomNavigation -->
+      <nav
+        class="bg-white/95 backdrop-blur-md border-t border-[#FFDFEA] px-3 pt-2 pb-6 flex items-center justify-around z-20"
+      >
+        <!-- Nav Item 1: Home -->
+        <button
+          class="flex flex-col items-center justify-center w-14 text-[#9D7180] hover:text-[#5E2B3A] transition"
+        >
+          <i class="fa-solid fa-house text-base"></i>
+          <span class="text-[10px] font-semibold mt-1">Home</span>
+        </button>
+        <!-- Nav Item 2: Planner (Active) -->
+        <button class="flex flex-col items-center justify-center w-14 text-rose-main">
+          <div class="relative">
+            <i class="fa-solid fa-calendar-heart text-base text-rose-main"></i>
+            <!-- Small indicator overlay for planner badge -->
+            <span class="absolute -top-1 -right-1 w-2 h-2 bg-rose-main rounded-full ring-2 ring-white"></span>
+          </div>
+          <span class="text-[10px] font-bold mt-1 text-rose-main">Planner</span>
+        </button>
+        <!-- Nav Item 3: Explore -->
+        <button
+          class="flex flex-col items-center justify-center w-14 text-[#9D7180] hover:text-[#5E2B3A] transition"
+        >
+          <i class="fa-solid fa-compass text-base"></i>
+          <span class="text-[10px] font-semibold mt-1">Explore</span>
+        </button>
+        <!-- Nav Item 4: Dates -->
+        <button
+          class="flex flex-col items-center justify-center w-14 text-[#9D7180] hover:text-[#5E2B3A] transition"
+        >
+          <i class="fa-solid fa-shirt text-base"></i>
+          <span class="text-[10px] font-semibold mt-1">Dates</span>
+        </button>
+        <!-- Nav Item 5: Memories -->
+        <button
+          class="flex flex-col items-center justify-center w-14 text-[#9D7180] hover:text-[#5E2B3A] transition"
+        >
+          <i class="fa-solid fa-box-archive text-base"></i>
+          <span class="text-[10px] font-semibold mt-1">Memories</span>
+        </button>
+      </nav>
+      <!-- END: BottomNavigation -->
+    </div>
+    <!-- END: MobileContainer -->
+  </body>
+</html>

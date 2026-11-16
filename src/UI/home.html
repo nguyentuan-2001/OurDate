@@ -1,0 +1,541 @@
+<!doctype html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      name="viewport"
+    />
+    <title>Our Date - Home</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-pink': '#FF6F91',
+              'brand-pink-light': '#FFD6E5',
+              'brand-pink-bg': '#FFF1F5',
+              'brand-maroon': '#4A1525',
+              'brand-purple': '#8B5CF6',
+              'brand-accent-yellow': '#FFB703',
+            },
+            fontFamily: {
+              sans: [
+                '-apple-system',
+                'BlinkMacSystemFont',
+                '"SF Pro Text"',
+                '"SF Pro Display"',
+                'Segoe UI',
+                'Roboto',
+                'Helvetica',
+                'Arial',
+                'sans-serif',
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- BEGIN: Custom Styles -->
+    <style data-purpose="custom-shadows-and-scrollbar">
+      /* Subtle background and card styling */
+      body {
+        background-color: #f7e6eb;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+
+      .soft-card-shadow {
+        box-shadow:
+          0 8px 24px -4px rgba(255, 111, 145, 0.12),
+          0 2px 8px -2px rgba(255, 111, 145, 0.06);
+      }
+
+      .cta-shadow {
+        box-shadow: 0 10px 22px -3px rgba(255, 111, 145, 0.45);
+      }
+
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+    <!-- END: Custom Styles -->
+  </head>
+  <body class="flex justify-center items-center min-h-screen py-0 sm:py-6 text-[#4A1525] antialiased">
+    <!-- BEGIN: Phone Frame / Container -->
+    <div
+      class="relative w-full max-w-[390px] h-[844px] bg-[#FFF1F5] rounded-[48px] shadow-2xl overflow-hidden border-[8px] border-[#222222] flex flex-col justify-between"
+    >
+      <!-- Subtle atmospheric background glow -->
+      <div
+        class="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-gradient-to-br from-[#ffdbe6] to-transparent opacity-70 blur-2xl pointer-events-none"
+      ></div>
+      <div
+        class="absolute top-80 -left-20 w-72 h-72 rounded-full bg-gradient-to-tr from-[#ffe7ee] to-transparent opacity-60 blur-xl pointer-events-none"
+      ></div>
+      <!-- BEGIN: Top Area (Status Bar & App Header) -->
+      <header class="relative z-10 pt-3 px-6 pb-2">
+        <!-- iOS Status Bar -->
+        <div
+          class="flex justify-between items-center text-xs font-semibold tracking-tight text-[#4A1525] h-5 mb-2"
+        >
+          <span class="pl-1">9:41</span>
+          <!-- Dynamic Island / Speaker notch placeholder space -->
+          <div class="w-24 h-4 bg-black/5 rounded-full hidden"></div>
+          <div class="flex items-center space-x-1.5 pr-1">
+            <!-- Cellular signal -->
+            <svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24">
+              <path
+                d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.23C2.89 16.48 2 14.34 2 12 2 6.48 6.48 2 12 2c2.34 0 4.48.89 6.23 2.35l-.62.62C16.07 3.74 14.12 3 12 3zm6.39 3.03l-.71.71C19.12 8.16 20 10 20 12c0 4.41-3.59 8-8 8-2 0-3.84-.88-5.26-2.32l-.71.71C7.65 20.04 9.72 21 12 21c4.97 0 9-4.03 9-9 0-2.28-.96-4.35-2.61-5.97zM6.5 12c0-3.03 2.47-5.5 5.5-5.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5S6.5 15.03 6.5 12z"
+              ></path>
+            </svg>
+            <!-- Wifi -->
+            <svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24">
+              <path
+                d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3c3.86 0 7.37 1.48 10.02 3.91L12 18.94 1.98 10.91C4.63 8.48 8.14 7 12 7z"
+              ></path>
+            </svg>
+            <!-- Battery -->
+            <div class="w-5 h-2.5 border border-[#4A1525] rounded-[3px] p-0.5 flex items-center">
+              <div class="h-full w-full bg-[#4A1525] rounded-xs"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Main Navigation Header -->
+        <div class="relative flex items-center justify-between mt-1">
+          <!-- Spacer for center alignment -->
+          <div class="w-7"></div>
+          <!-- Center Title -->
+          <h1 class="text-xl font-bold tracking-tight text-[#4A1525] flex items-center space-x-1">
+            <span>Our Date</span>
+            <span class="text-lg font-normal leading-none">♡</span>
+          </h1>
+          <!-- Notification Bell Icon -->
+          <button
+            aria-label="Thông báo"
+            class="relative w-8 h-8 flex items-center justify-center text-[#4A1525]"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+              viewbox="0 0 24 24"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <!-- END: Top Area -->
+      <!-- BEGIN: Scrollable Body Content -->
+      <main class="relative z-10 flex-1 overflow-y-auto px-5 pb-24 hide-scrollbar space-y-3.5">
+        <!-- Hero Greeting & Illustrated Chibi Couple Banner -->
+        <section
+          class="relative pt-1 pb-1 flex justify-between items-end min-h-[92px]"
+          data-purpose="hero-greeting"
+        >
+          <!-- Greeting Text -->
+          <div class="z-10 pb-1">
+            <p class="text-sm font-medium text-[#7A3A4E] leading-snug">Chào buổi sáng,</p>
+            <div class="flex items-center space-x-1.5">
+              <h2 class="text-2xl font-black text-[#4A1525] tracking-tight">Anh iu</h2>
+              <span class="text-xl font-normal text-[#4A1525]">♡</span>
+            </div>
+          </div>
+          <!-- Chibi Couple Illustration (SVG art accurately reflecting light_home.png) -->
+          <div class="relative w-36 h-24 flex items-end justify-end pointer-events-none">
+            <!-- Floating hearts -->
+            <span class="absolute top-2 right-20 text-[#FF6F91] text-xs transform -rotate-12 animate-pulse"
+              >♥</span
+            >
+            <span class="absolute -top-1 right-8 text-[#FF6F91] text-base transform rotate-12">♥</span>
+            <span class="absolute top-3 right-0 text-[#FF8FAB] text-[10px]">♥</span>
+            <!-- Couple Vector Art -->
+            <svg
+              class="w-32 h-24 drop-shadow-sm"
+              fill="none"
+              viewbox="0 0 140 100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Boy Body/Arm -->
+              <path
+                d="M15 95 C15 78 30 74 46 76 C55 77 62 82 66 95 Z"
+                fill="#FDFBF9"
+                stroke="#4A2525"
+                stroke-width="1.8"
+              ></path>
+              <!-- Girl Body/Arm -->
+              <path
+                d="M58 95 C62 76 75 72 98 74 C110 76 118 84 122 95 Z"
+                fill="#FFFFFF"
+                stroke="#4A2525"
+                stroke-width="1.8"
+              ></path>
+              <!-- Boy Head & Hair -->
+              <!-- Boy face -->
+              <path
+                d="M22 45 C20 62 34 72 48 71 C60 70 65 60 64 45 C64 36 54 34 44 34 C32 34 22 36 22 45 Z"
+                fill="#FFEDE3"
+              ></path>
+              <!-- Boy hair -->
+              <path
+                d="M18 42 C16 28 26 15 45 15 C60 15 68 25 66 38 C64 39 58 35 52 38 C46 32 38 32 32 37 C27 35 21 38 18 42 Z"
+                fill="#583A2E"
+                stroke="#3D251D"
+                stroke-width="1.6"
+              ></path>
+              <!-- Boy bangs & details -->
+              <path
+                d="M26 34 C30 42 36 43 40 40 C43 45 52 44 58 37"
+                stroke="#3D251D"
+                stroke-linecap="round"
+                stroke-width="1.6"
+              ></path>
+              <!-- Boy eyes & blush -->
+              <ellipse cx="36" cy="51" fill="#3D251D" rx="2" ry="3"></ellipse>
+              <ellipse cx="52" cy="50" fill="#3D251D" rx="2" ry="3"></ellipse>
+              <path d="M42 57 Q45 60 48 57" stroke="#3D251D" stroke-linecap="round" stroke-width="1.2"></path>
+              <ellipse cx="32" cy="54" fill="#FFA5BA" opacity="0.6" rx="4" ry="2"></ellipse>
+              <ellipse cx="56" cy="53" fill="#FFA5BA" opacity="0.6" rx="4" ry="2"></ellipse>
+              <!-- Girl Head & Hair -->
+              <!-- Back long hair -->
+              <path
+                d="M68 45 C65 65 68 85 74 92 C96 95 116 88 120 70 C124 55 120 40 115 32 Z"
+                fill="#694334"
+              ></path>
+              <!-- Girl face -->
+              <path
+                d="M72 46 C70 64 85 73 98 71 C109 69 114 58 112 46 C112 36 102 33 93 33 C82 33 72 36 72 46 Z"
+                fill="#FFF0E6"
+              ></path>
+              <!-- Girl hair front/bangs -->
+              <path
+                d="M68 40 C67 25 80 18 97 18 C114 18 122 28 120 44 C117 41 112 38 106 42 C100 35 90 35 84 41 C80 37 72 38 68 40 Z"
+                fill="#694334"
+                stroke="#48271C"
+                stroke-width="1.6"
+              ></path>
+              <!-- Girl side lock -->
+              <path d="M71 44 Q70 62 76 72" stroke="#48271C" stroke-linecap="round" stroke-width="1.5"></path>
+              <path
+                d="M117 42 Q119 60 115 72"
+                stroke="#48271C"
+                stroke-linecap="round"
+                stroke-width="1.5"
+              ></path>
+              <!-- Girl eyes (happy arcs) & smile -->
+              <path d="M83 50 Q87 46 91 50" stroke="#3D251D" stroke-linecap="round" stroke-width="1.8"></path>
+              <path
+                d="M100 49 Q104 45 108 49"
+                stroke="#3D251D"
+                stroke-linecap="round"
+                stroke-width="1.8"
+              ></path>
+              <path
+                d="M92 57 Q96 61 100 57"
+                stroke="#E6536C"
+                stroke-linecap="round"
+                stroke-width="1.5"
+              ></path>
+              <!-- Girl blush -->
+              <ellipse cx="82" cy="54" fill="#FFA5BA" opacity="0.8" rx="4.5" ry="2.2"></ellipse>
+              <ellipse cx="108" cy="53" fill="#FFA5BA" opacity="0.8" rx="4.5" ry="2.2"></ellipse>
+            </svg>
+          </div>
+        </section>
+        <!-- BEGIN: Milestone Card (Đã bên nhau) -->
+        <section
+          class="bg-white/90 backdrop-blur-md rounded-2xl p-3.5 px-4 flex items-center space-x-3.5 soft-card-shadow border border-white"
+          data-purpose="milestone-card"
+        >
+          <!-- Pink Heart Badge -->
+          <div
+            class="w-11 h-11 rounded-full bg-gradient-to-br from-[#FFA5BC] to-[#FF6F91] flex items-center justify-center flex-shrink-0 shadow-sm"
+          >
+            <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              ></path>
+            </svg>
+          </div>
+          <!-- Milestone Details -->
+          <div class="flex-1">
+            <p class="text-xs text-[#8B485A] font-normal">Đã bên nhau</p>
+            <p class="text-[15px] font-bold text-[#4A1525] tracking-tight leading-tight">
+              1 năm 3 tháng 12 <span class="font-normal text-sm">ngày</span>
+              <span class="text-xs text-[#FF6F91]">♡</span>
+            </p>
+          </div>
+        </section>
+        <!-- END: Milestone Card -->
+        <!-- BEGIN: Weather & Dating Suggestion Card -->
+        <section
+          class="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-2xl p-3.5 px-4 soft-card-shadow border border-white"
+          data-purpose="weather-card"
+        >
+          <!-- Floating big decorative heart on right background -->
+          <div
+            class="absolute -right-3 -bottom-3 w-20 h-20 text-[#FFD6E5]/60 pointer-events-none transform rotate-12"
+          >
+            <svg class="w-full h-full" fill="currentColor" viewbox="0 0 24 24">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              ></path>
+            </svg>
+          </div>
+          <div class="relative z-10 flex items-start space-x-3.5">
+            <!-- Weather Sun Icon -->
+            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
+              <svg
+                class="w-9 h-9 text-[#FFB703]"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" fill="#FFB703" r="5"></circle>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="12"
+                  x2="12"
+                  y1="1"
+                  y2="3"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="12"
+                  x2="12"
+                  y1="21"
+                  y2="23"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="4.22"
+                  x2="5.64"
+                  y1="4.22"
+                  y2="5.64"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="18.36"
+                  x2="19.78"
+                  y1="18.36"
+                  y2="19.78"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="1"
+                  x2="3"
+                  y1="12"
+                  y2="12"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="21"
+                  x2="23"
+                  y1="12"
+                  y2="12"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="4.22"
+                  x2="5.64"
+                  y1="19.78"
+                  y2="18.36"
+                ></line>
+                <line
+                  stroke="#FFB703"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  x1="18.36"
+                  x2="19.78"
+                  y1="5.64"
+                  y2="4.22"
+                ></line>
+              </svg>
+            </div>
+            <!-- Weather Info -->
+            <div>
+              <p class="text-xs text-[#8B485A] font-medium leading-none">Hôm nay</p>
+              <p class="text-xl font-extrabold text-[#4A1525] mt-1 leading-tight tracking-tight">28°C</p>
+              <p class="text-xs text-[#6A2B3D] mt-1 font-normal">Có nắng, rất hợp để hẹn hò!</p>
+            </div>
+          </div>
+        </section>
+        <!-- END: Weather Card -->
+        <!-- BEGIN: Section Kế hoạch sắp tới -->
+        <section class="space-y-2 pt-1" data-purpose="upcoming-plan">
+          <h3 class="text-base font-bold text-[#4A1525] tracking-tight">Kế hoạch sắp tới</h3>
+          <div
+            class="bg-white/90 backdrop-blur-md rounded-2xl p-3.5 flex items-center justify-between soft-card-shadow border border-white"
+          >
+            <div class="flex items-center space-x-3.5">
+              <!-- Calendar Date Badge -->
+              <div
+                class="w-12 h-14 bg-[#FFE8EE] rounded-xl flex flex-col items-center justify-center border border-[#FFD3DE] flex-shrink-0 text-[#FF6F91]"
+              >
+                <span class="text-[10px] font-bold leading-none tracking-tight">T7</span>
+                <span class="text-lg font-black leading-tight text-[#FF6F91]">08</span>
+                <span class="text-[9px] font-semibold leading-none text-[#9E4D65]">Th11</span>
+              </div>
+              <!-- Event Details -->
+              <div class="space-y-0.5">
+                <h4 class="text-sm font-bold text-[#4A1525] flex items-center space-x-1">
+                  <span>Hẹn hò cuối tuần</span>
+                  <span class="text-xs font-normal">♡</span>
+                </h4>
+                <p class="text-xs text-[#7B394D] font-medium">14:00 - 20:00</p>
+                <p class="text-[11px] text-[#9A566A]">3 địa điểm · ~500,000đ</p>
+              </div>
+            </div>
+            <!-- Chevron Right Icon -->
+            <div class="text-[#FF6F91] pr-1">
+              <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+          </div>
+        </section>
+        <!-- END: Section Kế hoạch sắp tới -->
+        <!-- BEGIN: Section Gợi ý cho hôm nay -->
+        <section class="space-y-2 pt-1" data-purpose="today-suggestions">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-[#4A1525] tracking-tight">Gợi ý cho hôm nay</h3>
+            <button class="text-xs font-medium text-[#7D3448] hover:text-[#FF6F91] transition-colors">
+              Xem thêm
+            </button>
+          </div>
+          <!-- Suggestion Cards Carousel -->
+          <div class="flex space-x-3 overflow-x-auto hide-scrollbar pb-1">
+            <!-- Suggestion Item 1 -->
+            <div
+              class="w-40 flex-shrink-0 bg-white rounded-2xl overflow-hidden soft-card-shadow border border-white"
+            >
+              <img
+                alt="Quán cafe kính xanh mát"
+                class="w-full h-24 object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQFl_c93x9of47LRsyHyvRTJSs9UFRndCnmvRKX4pdbyxQ8q7KJDheOTo7bMDTu4RgukxsxRCDfc3S7HfElAcHjFBIKhrcaI13U_dn7eL8ZjiipNB3WlNv8Ir4WTXjTdu4dQy6dYw2anCaywQjT2FA0YRSPqCUMDGSYT5twctzn8ycLB9iIecJYqMXWT2VKxMh8FeIpjb9CSyFOyOXEbD-w8lVDGYtS1WtC1adGQzL"
+              />
+            </div>
+            <!-- Suggestion Item 2 -->
+            <div
+              class="w-40 flex-shrink-0 bg-white rounded-2xl overflow-hidden soft-card-shadow border border-white"
+            >
+              <img
+                alt="Cặp đôi dạo chơi công viên"
+                class="w-full h-24 object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0Nm8NbcVQdEvMEUH66MdymZtf0JrjpnP7IXh4j8mbgDjXO8DvxAJwVeA5bemkRQCBITuka6eykSOIck7dU5Ti45Trd3gQdJzSSHnO9YEgzkKfe9dn0Fi4bb4gDuINP7e7bQf3MGMzR-ecwOYWmT_E-0ycJ-3yLal4IXD52xn-Oe6VaAAvz0G45ryj2lbOOmaYWqqpo2UhSYkIhpOjIj_wT35Ou-o_t4u8qTNg3vi8"
+              />
+            </div>
+          </div>
+        </section>
+        <!-- END: Section Gợi ý cho hôm nay -->
+      </main>
+      <!-- END: Scrollable Body Content -->
+      <!-- BEGIN: Floating Action Button (CTA) -->
+      <div class="absolute bottom-16 left-0 right-0 px-6 z-20 flex justify-center pointer-events-none">
+        <button
+          class="pointer-events-auto w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-[#FF6F91] via-[#FF7E9F] to-[#FF8FAB] text-white font-bold text-sm tracking-wide flex items-center justify-center space-x-2 cta-shadow hover:brightness-105 active:scale-95 transition-all"
+        >
+          <span>Lên kế hoạch hẹn hò</span>
+          <span class="text-base">✨</span>
+        </button>
+      </div>
+      <!-- END: Floating Action Button (CTA) -->
+      <!-- BEGIN: Bottom Tab Navigation Bar -->
+      <nav
+        class="relative z-10 bg-white/95 backdrop-blur-lg border-t border-[#FFDCE5] px-3 pt-2 pb-6 flex justify-around items-center"
+      >
+        <!-- Item: Home (Active) -->
+        <button class="flex flex-col items-center flex-1 text-[#FF6F91]">
+          <svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+          </svg>
+          <span class="text-[10px] font-bold mt-1">Home</span>
+        </button>
+        <!-- Item: Planner -->
+        <button
+          class="flex flex-col items-center flex-1 text-[#8C5263] hover:text-[#FF6F91] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current" fill="none" stroke-width="1.8" viewbox="0 0 24 24">
+            <path
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path d="M15 15l2-2m0 0l-2-2m2 2h-4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Planner</span>
+        </button>
+        <!-- Item: Explore -->
+        <button
+          class="flex flex-col items-center flex-1 text-[#8C5263] hover:text-[#FF6F91] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current" fill="none" stroke-width="1.8" viewbox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"></circle>
+            <polygon
+              fill="#8C5263"
+              opacity="0.3"
+              points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+            ></polygon>
+            <circle cx="12" cy="12" fill="currentColor" r="2"></circle>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Explore</span>
+        </button>
+        <!-- Item: Dates -->
+        <button
+          class="flex flex-col items-center flex-1 text-[#8C5263] hover:text-[#FF6F91] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current" fill="none" stroke-width="1.8" viewbox="0 0 24 24">
+            <path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M9 3v4M15 3v4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Dates</span>
+        </button>
+        <!-- Item: Memories -->
+        <button
+          class="flex flex-col items-center flex-1 text-[#8C5263] hover:text-[#FF6F91] transition-colors"
+        >
+          <svg class="w-5 h-5 stroke-current" fill="none" stroke-width="1.8" viewbox="0 0 24 24">
+            <rect height="16" rx="3" stroke-linecap="round" width="18" x="3" y="4"></rect>
+            <circle cx="12" cy="11.5" r="3.2"></circle>
+            <path d="M12 10.5 L12 12.5 M11 11.5 L13 11.5" stroke-linecap="round"></path>
+            <path d="M9 4.5 C9 3.5 15 3.5 15 4.5" stroke-linecap="round"></path>
+          </svg>
+          <span class="text-[10px] font-medium mt-1">Memories</span>
+        </button>
+      </nav>
+      <!-- END: Bottom Tab Navigation Bar -->
+      <!-- iOS Home Indicator Line -->
+      <div
+        class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-[#222222]/30 rounded-full z-30 pointer-events-none"
+      ></div>
+    </div>
+    <!-- END: Phone Frame / Container -->
+  </body>
+</html>

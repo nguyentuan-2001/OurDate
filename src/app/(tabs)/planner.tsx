@@ -1,7 +1,9 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Switch, View } from 'react-native';
+import { Switch, View } from 'react-native';
 
-import { Button, Card, Chip, Input, Screen, Text } from '@/components/ui';
+import { CatHeartIllustration } from '@/components/illustrations/CatHeartIllustration';
+import { Button, Chip, FieldCard, Input, Screen, Text } from '@/components/ui';
 import { interestOptions, transportOptions } from '@/constants/mock-data';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -10,130 +12,120 @@ const startPointOptions = ['Nhà tôi', 'Nhà người yêu', 'Tự chọn đi�
 export default function PlannerScreen() {
   const { colors, spacing } = useTheme();
 
-  const [date, setDate] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [budget, setBudget] = useState('');
+  const [date, setDate] = useState('08/11/2026');
+  const [startTime, setStartTime] = useState('14:00');
+  const [endTime, setEndTime] = useState('20:00');
+  const [budget, setBudget] = useState('500.000đ');
   const [radiusKm, setRadiusKm] = useState('15');
-  const [transportMode, setTransportMode] = useState<(typeof transportOptions)[number]['value']>('DRIVE');
+  const [transportMode, setTransportMode] =
+    useState<(typeof transportOptions)[number]['value']>('TWO_WHEELER');
   const [startPoint, setStartPoint] = useState<(typeof startPointOptions)[number]>(startPointOptions[0]);
   const [pickupPartnerFirst, setPickupPartnerFirst] = useState(true);
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(['food']);
   const [notes, setNotes] = useState('');
-  const [dateError, setDateError] = useState<string | undefined>();
+  const [error, setError] = useState<string | undefined>();
 
-  function toggleInterest(interest: string) {
+  function toggleInterest(value: string) {
     setSelectedInterests((prev) =>
-      prev.includes(interest) ? prev.filter((item) => item !== interest) : [...prev, interest],
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value],
     );
   }
 
   function handleSubmit() {
-    if (!date || !startTime || !endTime) {
-      setDateError('Vui lòng nhập ngày, giờ bắt đầu và giờ kết thúc.');
+    if (!date.trim() || !startTime.trim() || !endTime.trim()) {
+      setError('Vui lòng nhập ngày, giờ bắt đầu và giờ kết thúc.');
       return;
     }
-    setDateError(undefined);
-
-    Alert.alert(
-      'Sắp ra mắt',
-      'Bộ lập lịch trình thông minh sẽ được kết nối ở Milestone 6 (Planner logic và AI). ' +
-        'Hiện tại form chỉ đang hiển thị giao diện với dữ liệu bạn vừa nhập.',
-    );
+    setError(undefined);
+    router.push('/itinerary-result');
   }
+
+  const transportIcon =
+    transportOptions.find((option) => option.value === transportMode)?.icon ?? 'car-outline';
+  const transportLabel = transportOptions.find((option) => option.value === transportMode)?.label ?? '';
 
   return (
     <Screen scroll>
-      <View style={{ gap: spacing.xl }}>
-        <View style={{ gap: spacing.xs }}>
-          <Text variant="display">AI Date</Text>
-          <Text variant="bodySmall" color="textSecondary">
-            Nhập thông tin buổi hẹn để tạo lịch trình phù hợp cho cả hai.
-          </Text>
-        </View>
-
-        <Card style={{ backgroundColor: colors.surfaceSecondary, borderColor: colors.surfaceSecondary }}>
-          <Text variant="caption" color="textSecondary">
-            Giao diện Milestone 1 — chưa kết nối bộ lập lịch trình thật. Nhấn &quot;Tạo lịch trình&quot; để
-            xem thông báo trạng thái.
-          </Text>
-        </Card>
-
-        <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <View style={{ flex: 1 }}>
-            <Input label="Ngày đi" placeholder="YYYY-MM-DD" value={date} onChangeText={setDate} />
+      <View style={{ gap: spacing.lg }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <View style={{ flex: 1, paddingRight: spacing.md }}>
+            <Text variant="display">AI Date Planner ✨</Text>
+            <Text variant="bodySmall" color="textSecondary" style={{ marginTop: spacing.xs }}>
+              Để Our Date lên kế hoạch hẹn hò hoàn hảo cho hai bạn nhé! ♡
+            </Text>
           </View>
-        </View>
-
-        <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <View style={{ flex: 1 }}>
-            <Input
-              label="Giờ bắt đầu"
-              placeholder="HH:mm"
-              value={startTime}
-              onChangeText={setStartTime}
-              errorText={dateError}
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Input label="Giờ kết thúc" placeholder="HH:mm" value={endTime} onChangeText={setEndTime} />
-          </View>
-        </View>
-
-        <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <View style={{ flex: 1 }}>
-            <Input
-              label="Ngân sách (VND)"
-              placeholder="Ví dụ: 500000"
-              keyboardType="numeric"
-              value={budget}
-              onChangeText={setBudget}
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Input
-              label="Bán kính khám phá (km)"
-              keyboardType="numeric"
-              value={radiusKm}
-              onChangeText={setRadiusKm}
-            />
-          </View>
+          <CatHeartIllustration />
         </View>
 
         <View style={{ gap: spacing.sm }}>
-          <Text variant="bodySmall" color="textSecondary">
-            Phương tiện
-          </Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
-            {transportOptions.map((option) => (
-              <Chip
-                key={option.value}
-                label={option.label}
-                selected={transportMode === option.value}
-                onPress={() => setTransportMode(option.value)}
+          <FieldCard
+            icon="calendar-outline"
+            label="Ngày đi"
+            value={date}
+            onChangeText={setDate}
+            errorText={error}
+          />
+          <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+            <View style={{ flex: 1 }}>
+              <FieldCard
+                icon="time-outline"
+                label="Giờ bắt đầu"
+                value={startTime}
+                onChangeText={setStartTime}
               />
-            ))}
+            </View>
+            <View style={{ flex: 1 }}>
+              <FieldCard icon="time-outline" label="Giờ kết thúc" value={endTime} onChangeText={setEndTime} />
+            </View>
           </View>
+          <FieldCard
+            icon="cash-outline"
+            label="Ngân sách"
+            value={budget}
+            onChangeText={setBudget}
+            keyboardType="numeric"
+          />
+          <FieldCard
+            icon="locate-outline"
+            label="Bán kính khám phá (km)"
+            value={radiusKm}
+            onChangeText={setRadiusKm}
+            keyboardType="numeric"
+          />
+          <FieldCard
+            icon={transportIcon}
+            label="Phương tiện (chạm để đổi)"
+            value={transportLabel}
+            onPress={() => {
+              const currentIndex = transportOptions.findIndex((option) => option.value === transportMode);
+              const next = transportOptions[(currentIndex + 1) % transportOptions.length];
+              setTransportMode(next.value);
+            }}
+          />
         </View>
 
         <View style={{ gap: spacing.sm }}>
-          <Text variant="bodySmall" color="textSecondary">
-            Sở thích
+          <Text variant="bodyMedium">
+            Sở thích{' '}
+            <Text variant="caption" color="textSecondary">
+              (chọn nhiều)
+            </Text>
           </Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
             {interestOptions.map((interest) => (
               <Chip
-                key={interest}
-                label={interest}
-                selected={selectedInterests.includes(interest)}
-                onPress={() => toggleInterest(interest)}
+                key={interest.value}
+                icon={interest.icon}
+                label={interest.label}
+                selected={selectedInterests.includes(interest.value)}
+                onPress={() => toggleInterest(interest.value)}
               />
             ))}
           </View>
         </View>
 
         <View style={{ gap: spacing.sm }}>
-          <Text variant="bodySmall" color="textSecondary">
+          <Text variant="caption" color="textSecondary">
             Điểm bắt đầu
           </Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
@@ -174,7 +166,12 @@ export default function PlannerScreen() {
           numberOfLines={3}
         />
 
-        <Button label="Tạo lịch trình" onPress={handleSubmit} />
+        <Button label="Tạo lịch trình bằng AI ✨" onPress={handleSubmit} />
+
+        <Text variant="caption" color="textSecondary" style={{ textAlign: 'center' }}>
+          Giao diện minh hoạ — lịch trình hiển thị là dữ liệu mẫu, chưa nối bộ lập lịch trình thật (Milestone
+          6).
+        </Text>
       </View>
     </Screen>
   );
