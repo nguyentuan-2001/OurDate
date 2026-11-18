@@ -134,6 +134,16 @@ Rate limit endpoint. Token không được đưa vào analytics/log.
 
 ## 6. Google Places API
 
+> **Cập nhật 2026-11-18**: Đã đổi nguồn dữ liệu thật sang **OpenStreetMap
+> (Nominatim)** thay vì Google Places — chủ dự án không có thẻ thanh toán
+> để bật billing Google Cloud (xác nhận qua AskUserQuestion, xem
+> `PROGRESS.md` mục 10 BUG-012 và mục 12). Schema request/response nội bộ
+> bên dưới vẫn giữ nguyên hình dạng để tối thiểu thay đổi, nhưng
+> `provider` trả về `"openstreetmap"` và các trường `rating`/
+> `user_ratings_total`/`price_level`/`business_status` luôn là `null` (OSM
+> không có dữ liệu này). Implementation thật ở
+> `supabase/functions/places-search/index.ts`.
+
 ### Mục đích
 - Tìm địa điểm theo từ khóa/danh mục/khu vực.
 - Lấy thông tin địa điểm để hiển thị.

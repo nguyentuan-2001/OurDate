@@ -30,7 +30,13 @@
           "imageWidth": 76
         }
       ],
-      "expo-font"
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Our Date cần quyền truy cập vị trí để tìm địa điểm gần bạn."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -20,8 +20,8 @@
   Bản đồ                Google Maps Platform (chưa tích hợp — Milestone 4-5)
   AI                    Provider có thể cấu hình (chưa tích hợp — Milestone 6)
   Ngôn ngữ              Tiếng Việt
-  Trạng thái tổng thể   Milestone 1-3 đều đã kiểm tra thật với Supabase (M3 vừa xong 2026-11-18); chỉ còn M2-008 (xác nhận Couple trên thiết bị thật của 2 người) trước khi chuyển sang Milestone 4
-  Milestone hiện tại    M4 --- Khám phá địa điểm (chưa bắt đầu)
+  Trạng thái tổng thể   Milestone 1-3 đều đã kiểm tra thật với Supabase; M2-008 tạm hoãn (chưa đủ thiết bị). Milestone 4 (tìm địa điểm qua OpenStreetMap) đã xác nhận chạy thật trên thiết bị Android của chủ dự án — còn M4-006/008/009 (chi tiết địa điểm, giới hạn request, lưu yêu thích) chưa làm
+  Milestone hiện tại    M4 --- Khám phá địa điểm (IN_PROGRESS)
   Cập nhật gần nhất     2026-11-18
 
 > Claude phải thay các giá trị "chưa xác minh" sau khi kiểm tra
@@ -46,9 +46,9 @@ chứng kiểm tra. Nếu chưa chạy trên thiết bị thật, phải ghi rõ
   ----------- ---------------------------------- ------------ ---------
   M0          Audit repository và lập kế hoạch   `[x]`        Xong 2026-11-09
   M1          Khởi tạo app và design system      `[x]`        Xong 2026-11-09, chưa chạy thử trên thiết bị thật
-  M2          Authentication và Couple           `[~]`        M2-001..007 DONE (đã kiểm tra thật với Supabase); M2-008 còn thiếu xác nhận trên thiết bị thật
+  M2          Authentication và Couple           `[~]`        M2-001..007 DONE (đã kiểm tra thật với Supabase); M2-008 DEFERRED (chủ dự án chưa đủ thiết bị, 2026-11-18)
   M3          Địa chỉ và sở thích                `[x]`        Xong 2026-11-18, đã kiểm tra thật với Supabase (bao gồm M3-008 — RLS chặn đúng)
-  M4          Khám phá địa điểm                  `[ ]`        
+  M4          Khám phá địa điểm                  `[~]`        M4-001..005/007 DONE (đã kiểm tra thật trên thiết bị Android); M4-006/008/009 chưa làm
   M5          Bản đồ và thời gian di chuyển      `[ ]`        
   M6          Planner logic và AI                `[ ]`        
   M7          Đồng bộ và lịch sử                 `[ ]`        
@@ -376,18 +376,18 @@ chứng kiểm tra. Nếu chưa chạy trên thiết bị thật, phải ghi rõ
         hình Home của tài khoản thứ 2 không còn hiện thẻ "Đang chờ người ấy
         tham gia" (đúng, vì Couple đã đủ 2 thành viên).
     -   File: cùng migration ở M2-005, `src/app/(onboarding)/join-couple.tsx`.
--   [~] **M2-008 --- Kiểm thử hai tài khoản trên hai thiết bị**
+-   [-] **M2-008 --- Kiểm thử hai tài khoản trên hai thiết bị**
+    -   **DEFERRED 2026-11-18** — chủ dự án xác nhận để sau vì hiện chưa đủ
+        thiết bị (cần ít nhất 2 điện thoại/tài khoản thật để tự xác nhận).
+        Không phải BLOCKED (không cần ai gỡ), chỉ tạm hoãn theo quyết định
+        chủ dự án, sẽ làm khi có đủ thiết bị.
     -   Đã kiểm tra được **luồng đầy đủ bằng 2 tài khoản thật** (tạo Couple
         → tạo mã mời → tài khoản khác tham gia → cả 2 bên đều đúng trạng
         thái 2/2 thành viên) — tự động hoá qua trình duyệt (Expo Web +
         Playwright), không phải qua 2 thiết bị di động vật lý. Theo đúng
         quy tắc CLAUDE.md mục 11 (không nói "đã chạy trên thiết bị thật"
-        nếu chưa chạy thật), **giữ IN_PROGRESS** — chưa coi là hoàn thành
-        cho tới khi xác nhận trên ít nhất 2 thiết bị/trình duyệt thật của
-        chủ dự án và người ấy (hoặc 2 tài khoản thật của chủ dự án).
-    -   Còn thiếu: Chủ dự án (và/hoặc người ấy) tự thử luồng này bằng tài
-        khoản thật trên điện thoại, hoặc xác nhận chấp nhận kết quả test tự
-        động ở trên là đủ.
+        nếu chưa chạy thật), task này KHÔNG được tính là hoàn thành chỉ vì
+        kết quả tự động — cần chủ dự án tự xác nhận khi có đủ thiết bị.
     -   **Lưu ý dữ liệu thử nghiệm**: Trong lúc test M2-005/006/007, đã
         thật sự tạo 1 Couple tên **"TEST - Playwright E2E"** trong project
         Supabase thật, với 2 thành viên là 2 tài khoản test
@@ -479,15 +479,90 @@ lệnh kiểm tra, kết quả và ghi chú.
 
 ### M4 --- Khám phá địa điểm
 
--   [ ] **M4-001 --- Xác minh Places API và quota**
--   [ ] **M4-002 --- Tạo server-side search endpoint**
--   [ ] **M4-003 --- Chuẩn hóa dữ liệu địa điểm**
--   [ ] **M4-004 --- UI tìm kiếm và danh sách kết quả**
--   [ ] **M4-005 --- Bộ lọc danh mục và bán kính**
+-   [x] **M4-001 --- Xác minh Places API và quota**
+    -   Bắt đầu: 2026-11-18. Hoàn thành: 2026-11-18.
+    -   Đổi nguồn dữ liệu sang OpenStreetMap/Nominatim (xem BUG-012 mục
+        10) sau khi xác nhận Google Places không khả thi (chủ dự án không
+        có thẻ thanh toán). Đã test thật: gọi Nominatim thành công
+        (HTTP 200), trả về địa điểm thật tại Hà Nội (tên, địa chỉ, toạ
+        độ chính xác — đã đối chiếu thủ công). Không có "quota" cần xác
+        minh vì Nominatim không cần key, chỉ cần tuân thủ chính sách dùng
+        nhẹ (tối đa 1 request/giây, có User-Agent rõ ràng).
+-   [x] **M4-002 --- Tạo server-side search endpoint**
+    -   Hoàn thành: 2026-11-18.
+    -   **Đã thử Edge Function trước, KHÔNG dùng được, đã đổi hướng**: Viết
+        `supabase/functions/places-search/index.ts` (Deno) validate input,
+        gọi Nominatim, có cache đơn giản. Chủ dự án deploy thành công qua
+        Supabase Dashboard, nhưng khi gọi thật: **Nominatim trả về HTTP 403
+        khi request đến từ hạ tầng server của Supabase** (chặn IP
+        cloud/datacenter theo chính sách chống lạm dụng) — trong khi cùng
+        request đó chạy bình thường (HTTP 200) từ máy khác. Đây là lỗi hạ
+        tầng thật, chỉ phát hiện được khi deploy và gọi thật, không thấy
+        được qua test logic đơn thuần.
+    -   **Đã sửa**: Chuyển hẳn sang gọi Nominatim **trực tiếp từ app**
+        (không qua server) — an toàn vì Nominatim không cần API key bí mật
+        (khác Google, lý do duy nhất ban đầu cần qua server là giấu key
+        trả phí). Điện thoại dùng IP mạng thường (Wi-Fi/di động), không bị
+        Nominatim chặn như IP server. Đã xoá `supabase/functions/`
+        (không còn dùng), revert `tsconfig.json`.
+    -   Kiểm tra đã chạy: test logic với dữ liệu Nominatim thật — nhiều
+        lượt tìm kiếm thành công (HTTP 200) từ cách gọi trực tiếp kiểu
+        client. Phát hiện + sửa 1 lỗi thật khác (tên địa điểm rỗng không
+        fallback đúng sang địa chỉ khi tag `name` là chuỗi rỗng thay vì
+        `undefined`).
+    -   File: `src/features/places/placesSearch.ts` (logic nằm hẳn ở
+        client, không còn Edge Function).
+-   [x] **M4-003 --- Chuẩn hóa dữ liệu địa điểm**
+    -   Hoàn thành: 2026-11-18.
+    -   Response chuẩn hoá theo `docs/API_INTEGRATION_SPEC.md` mục 6 (đã
+        ghi chú cập nhật nguồn dữ liệu ở đầu mục đó): `provider`,
+        `place_id`, `name`, `formatted_address`, `location`,
+        `opening_hours`, `phone` (2 trường thêm so với bản gốc, có thật
+        từ OSM khi địa điểm có khai báo). `rating`/`user_ratings_total`/
+        `price_level`/`business_status` luôn `null` — KHÔNG bịa, vì OSM
+        không có các trường này.
+-   [x] **M4-004 --- UI tìm kiếm và danh sách kết quả**
+    -   Bắt đầu: 2026-11-18. Hoàn thành: 2026-11-18.
+    -   Đã làm: `src/features/places/placesSearch.ts` (gọi Nominatim trực
+        tiếp từ app, dịch lỗi sang tiếng Việt), `src/features/places/useCurrentLocation.ts`
+        (xin quyền vị trí qua `expo-location`, xử lý từ chối quyền). Viết
+        lại `src/app/(tabs)/explore.tsx`: ô tìm kiếm debounce 600ms, danh
+        sách kết quả thật, không còn dữ liệu mẫu.
+    -   **Kiểm tra thật trên thiết bị Android của chủ dự án (2026-11-18,
+        qua Expo Go)**: xin quyền vị trí thành công, chọn danh mục "Café"
+        → hiện đúng 4+ quán cà phê thật gần Hà Nội (AHA Cafe, Trang Cafe,
+        Cafe 15, Cafe Năng...), có tên + địa chỉ đầy đủ, đúng dữ liệu thật
+        từ OpenStreetMap — chủ dự án xác nhận bằng ảnh chụp màn hình thật.
+    -   File: `src/features/places/placesSearch.ts`,
+        `src/features/places/useCurrentLocation.ts`,
+        `src/app/(tabs)/explore.tsx`, `app.json` (thêm plugin
+        `expo-location` với thông báo xin quyền tiếng Việt).
+-   [x] **M4-005 --- Bộ lọc danh mục và bán kính**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: 4 danh mục (Café/Nhà hàng/Chụp ảnh/Vui chơi) map sang từ
+        khoá tìm kiếm tiếng Anh khớp tag OSM tốt hơn (quyết định kỹ thuật
+        nhỏ, xem mục 12); bán kính lấy từ `couple_preferences` (M3) làm
+        mặc định. Đã kiểm tra thật: lọc theo danh mục "Café" hoạt động
+        đúng trên thiết bị thật (xem M4-004). Chưa có UI chỉnh bán kính
+        riêng cho từng lần tìm (dùng mặc định từ Cài đặt) — có thể bổ
+        sung sau nếu cần.
 -   [ ] **M4-006 --- Chi tiết địa điểm**
--   [ ] **M4-007 --- Loading/error/empty/retry**
+    -   Chưa làm — màn hình chi tiết địa điểm (ảnh, giờ mở cửa đầy đủ,
+        nút mở bản đồ) để sau.
+-   [x] **M4-007 --- Loading/error/empty/retry**
+    -   Đã làm: trạng thái loading (xin quyền vị trí + đang tìm), lỗi
+        (từ chối quyền vị trí / lỗi tìm kiếm, đều có nút "Thử lại"), rỗng
+        (chưa nhập gì / không có kết quả) — dùng component `Loading`/
+        `ErrorState`/`EmptyState` có sẵn.
 -   [ ] **M4-008 --- Cache và giới hạn request**
+    -   Đã có cache đơn giản trong Edge Function (TTL 5 phút, theo
+        từ-khoá+khu-vực) — xem M4-002. Debounce 600ms ở client giảm số
+        lần gọi khi gõ. Chưa có giới hạn request phía server theo
+        user/IP — cân nhắc thêm nếu thấy cần khi có nhiều người dùng hơn.
 -   [ ] **M4-009 --- Lưu địa điểm yêu thích**
+    -   Chưa làm. Nút tim trên mỗi kết quả hiện báo "Sắp ra mắt" (không
+        giả vờ đã lưu) — cần thêm bảng `saved_places` (đã có trong
+        `docs/DATABASE_SCHEMA.md` mục 3.8) ở lượt làm việc sau.
 
 ### M5 --- Bản đồ và thời gian di chuyển
 
@@ -569,12 +644,13 @@ Claude ghi rõ các thao tác cần người dùng làm, ví dụ:
   ------- --------------------------------------------------- --------------- ---------------
   U-001   Kiểm tra Node.js/Git                                 Đã xác minh     Node v22.22.3, npm v10.9.8, Git v2.53.0
   U-002   Tạo Supabase project + chạy 2 migration qua SQL Editor   **Hoàn thành** (2026-11-11)     4 bảng đã tạo, RLS đã bật, xác nhận qua Table Editor
-  U-003   Cấu hình Google Cloud                                Chưa cần        Đợi đến M4/M5
+  U-003   Cấu hình Google Cloud                                **Không cần nữa** (2026-11-18)   Chủ dự án không có thẻ thanh toán → đổi M4 sang OpenStreetMap (miễn phí, không cần tài khoản). Xem BUG-012 ở mục 10.
   U-004   Chọn AI API và giới hạn chi phí                      Chưa cần        Đợi đến M6
   U-005   Cài Expo Go trên Android/iPhone, chạy `npm run start` và quét mã QR để xác nhận M1-010   Cần làm   Xem `docs/SETUP.md` bước 3-4
   U-006   Tự đăng ký 1 tài khoản bằng email thật, xác nhận email, đăng nhập thử   **Hoàn thành** (2026-11-11)   Đăng ký/đăng nhập hoạt động đúng trên thiết bị của chủ dự án
   U-007   Chạy migration `supabase/migrations/20261117000001_couple_rpc_functions.sql` qua Supabase SQL Editor   **Hoàn thành** (2026-11-16, đã chạy lại sau khi sửa lỗi pgcrypto)   Đã xác nhận cả 3 hàm RPC chạy đúng (HTTP 200) sau khi chạy lại
   U-008   Chạy migration mới `supabase/migrations/20261117000002_private_places_and_preferences.sql` qua SQL Editor   **Hoàn thành** (2026-11-18)   Đã xác nhận cả 2 bảng + RLS hoạt động đúng (M3-001..008 PASS)
+  U-009   Deploy Edge Function `places-search` qua Supabase Dashboard   **Không cần nữa** (2026-11-18)   Chủ dự án đã deploy thử, nhưng phát hiện Nominatim chặn IP server Supabase (HTTP 403) — đã đổi sang gọi trực tiếp từ app, không cần Edge Function này nữa. Có thể xoá function "places-search" trên Dashboard nếu muốn dọn dẹp (không bắt buộc).
 
 Không yêu cầu người dùng tạo tài khoản/dịch vụ trước khi task thực sự
 cần đến.
@@ -654,6 +730,8 @@ cần đến.
   2026-11-11   Xác nhận: ảnh kỷ niệm (upload photo) và luồng rời-couple CHÍNH THỨC thuộc MVP (trước đó blueprint gốc để sau MVP)   Chủ dự án chọn theo USER_FLOWS.md/DATABASE_SCHEMA.md mới   Chủ dự án (qua AskUserQuestion 2026-11-11)
   2026-11-11   Xác nhận: đổi bảng màu theme sang `docs/UI_DESIGN_SPEC.md` ("Cute Romantic"), thay bảng màu blueprint gốc   Chủ dự án chọn style mới   Chủ dự án (qua AskUserQuestion 2026-11-11)
   2026-11-11   Xác nhận: schema M2 dùng tên bảng/cột theo `docs/DATABASE_SCHEMA.md` nhưng CHƯA thêm status rời-couple/mã hoá (để dành M3/M7)   Chủ dự án chọn phương án "kết hợp tối thiểu"   Chủ dự án (qua AskUserQuestion 2026-11-11)
+  2026-11-18   M2-008 (kiểm thử 2 tài khoản trên 2 thiết bị thật) chuyển DEFERRED, không chặn tiến độ các milestone sau   Chủ dự án hiện chưa đủ thiết bị (≥2 điện thoại/tài khoản thật)   Chủ dự án
+  2026-11-18   Đổi nguồn dữ liệu địa điểm Milestone 4 từ Google Places API sang OpenStreetMap (Nominatim) — khác với OUR_DATE_BLUEPRINT.md và docs/API_INTEGRATION_SPEC.md mục 6 (đều ghi Google)   Google bắt buộc thẻ thanh toán để bật API, chủ dự án không có thẻ. Ban đầu định dùng Overpass API nhưng các mirror công khai đều chặn/không ổn định từ môi trường của Claude — đổi sang Nominatim (dịch vụ chính thức OSM Foundation), đã test thật thành công.   Chủ dự án (qua AskUserQuestion 2026-11-18)
 
 ## 10. Lỗi và vấn đề cần xử lý
 
@@ -670,6 +748,7 @@ cần đến.
   BUG-009   Tên endpoint backend khác nhau giữa blueprint mục 8 (`create-invite`, `search-places`...) và `API_INTEGRATION_SPEC.md` (`create-couple-invitation`, `places-search`...)   Nhỏ   Mở — chờ xác nhận   M2 trở đi
   BUG-010   Chủ dự án báo có vệt đen ở đáy màn hình + nội dung trống khi chuyển tab (chạy thật trên Android qua Expo Go)   Thấp   **Không phải lỗi** — xác nhận 2026-11-16 qua ảnh chụp bạn gửi: đó là khung "Bundling... app/(tabs)/index.tsx" của Expo (bình thường khi dev qua Expo Go, Metro biên dịch từng màn theo yêu cầu). Sẽ không còn khi build app thật. Vẫn giữ 2 cải thiện đã làm (`sceneStyle`, sửa API `expo-navigation-bar`) vì vô hại và có ích.   Không áp dụng
   BUG-011   `private_places`: blueprint mục 7.5 gợi ý cột `couple_id` + nhãn ví dụ "Nhà người yêu" (ngụ ý người yêu có thể thấy), còn `DATABASE_SCHEMA.md` mục 3.7/5 nói rõ owner-only, không có policy couple-wide   Trung bình   **Đã xử lý 2026-11-17** — chọn owner-only (an toàn hơn, đúng tinh thần CLAUDE.md mục 8 về không lộ địa chỉ nhà); nhãn "Nhà người yêu" hiểu là do chính chủ tự đặt tên cho địa chỉ họ biết, không phải người yêu tự xem được. Chưa hỏi chủ dự án vì không làm giảm tính năng và an toàn hơn — sẽ điều chỉnh nếu chủ dự án muốn người yêu xem được.   M3-001
+  BUG-012   Blueprint/docs đặc tả đều dùng Google Maps Platform (Places/Routes API) cho M4/M5, nhưng Google bắt buộc có thẻ thanh toán để bật API — chủ dự án không có thẻ   Nghiêm trọng (thay đổi công nghệ cốt lõi)   **Đã xác nhận 2026-11-18** (qua AskUserQuestion) — đổi nguồn dữ liệu địa điểm (M4) sang OpenStreetMap, dùng **Nominatim** (dịch vụ chính thức OSM Foundation, không cần tài khoản/key). Lưu ý kỹ thuật: ban đầu định dùng Overpass API nhưng các mirror công khai (overpass-api.de, kumi.systems, osm.ch, openstreetmap.fr, nchc.org.tw) đều trả lỗi 406/403 hoặc không kết nối được từ môi trường chạy của Claude — rất có thể do chặn IP datacenter/cloud, nghĩa là Edge Function thật (chạy trên hạ tầng Deno Deploy của Supabase, cũng là IP datacenter) có nguy cơ gặp vấn đề tương tự nếu sau này đổi sang Overpass. Nominatim (nominatim.openstreetmap.org) hoạt động ổn định, đã test thật thành công. Đánh đổi dữ liệu: không có rating/review/giờ mở cửa chuẩn hoá cho mọi địa điểm — hiển thị "không có dữ liệu" thay vì bịa. M5 (Routes API) sẽ cần xác nhận lại tương tự khi tới lúc, vì Google Routes cũng cần billing.   M4-001 trở đi
 
 ## 11. Kết quả kiểm tra gần nhất
 
@@ -696,6 +775,11 @@ cần đến.
   2026-11-16   `npx expo lint`, `npx tsc --noEmit` (sau khi thêm Couple feature)   PASS   Phát hiện + sửa 1 lỗi lint thật (`react-hooks/set-state-in-effect` ở `CoupleProvider.tsx`, sửa bằng `queueMicrotask`)
   2026-11-16   `npm test` (sau khi thêm Couple feature + 3 màn hình onboarding)   PASS (11/11)   Phải thêm `jest.setup.js` (mock `@react-native-async-storage/async-storage` theo hướng dẫn chính thức của thư viện + nạp `.env` bằng `@expo/env` để Supabase client không throw lúc test)
   2026-11-16   Integration test qua Expo Web + Playwright, 2 tài khoản test thật, với Supabase project thật   **PASS — `create_couple`, `create_couple_invitation`, `accept_couple_invitation` đều HTTP 200**   Phát hiện + sửa 1 lỗi thật (thiếu `extensions` trong search_path của `pgcrypto`); CHƯA chạy trên 2 thiết bị di động thật (xem M2-008)
+  2026-11-18   Test logic `places-search` (script Node độc lập, gọi Nominatim thật) — 5 test case validate + tìm kiếm thật   PASS — tất cả đúng kỳ vọng   Phát hiện + sửa 1 lỗi thật (fallback tên địa điểm rỗng)
+  2026-11-18   Chủ dự án deploy Edge Function `places-search` qua Supabase Dashboard; Claude gọi thử bằng request thật   **FAIL — HTTP 403 từ Nominatim** (chặn IP server Supabase)   Phát hiện lỗi hạ tầng thật, chỉ thấy được khi deploy + gọi thật — đã sửa bằng cách chuyển gọi Nominatim sang phía client
+  2026-11-18   `npx expo lint`, `npx tsc --noEmit`, `npm test` (sau khi thêm M4 places search + expo-location)   PASS (13/13)   Loại `supabase/functions/**` khỏi `tsconfig.json` (Deno runtime, không chung type với app); thêm mock `expo-location` vào `jest.setup.js`
+  2026-11-18   Sự cố môi trường dev khi chủ dự án mở app trên điện thoại: (1) server Git Bash bị crash `EMFILE: too many open files` (Git Bash/MINGW64 giới hạn 3200 file mở, dự án đã lớn); (2) PowerShell chặn `npm.ps1` theo execution policy mặc định; (3) `expo start --tunnel ngrok` lỗi vì tự cài `@expo/ngrok` kiểu global không được CLI nhận ra   Đã sửa cả 3: (1) khởi động lại server; (2) dùng `npm.cmd`/`npx.cmd` thay vì gọi thẳng `npm`/`npx` trong PowerShell; (3) cài `@expo/ngrok` làm devDependency local thay vì global   Xem mục 12 "Quyết định kỹ thuật" — khuyến nghị chạy `npm run start` bằng PowerShell (qua `npm.cmd`) thay vì Git Bash trên máy chủ dự án
+  2026-11-18   M4-004/005 (kiểm tra thật trên thiết bị)   Chủ dự án mở app qua Expo Go trên điện thoại Android thật, xin quyền vị trí, chọn danh mục "Café"   **PASS — hiện đúng địa điểm thật** (AHA Cafe, Trang Cafe, Cafe 15, Cafe Năng... kèm địa chỉ đầy đủ), xác nhận bằng ảnh chụp màn hình thật   M4-004/005 chuyển DONE
 
 Các loại kiểm tra cần phân biệt: - Lint. - Typecheck. - Unit test. -
 Integration test. - Build. - Chạy trên Android emulator/thiết bị thật. -
@@ -723,21 +807,24 @@ Ghi các quyết định quan trọng để Claude ở phiên sau không tự th
   2026-11-17   M3: `private_places` KHÔNG mã hoá tầng ứng dụng, chỉ dựa vào RLS (BUG-002)   Chủ dự án xác nhận qua AskUserQuestion — ưu tiên đơn giản cho app 2 người dùng   Có thể nâng cấp lên mã hoá/KMS sau nếu mở rộng quy mô người dùng
   2026-11-17   M3: `private_places` owner-only (cột `user_id`, không có `couple_id`) — người yêu không đọc được dù cùng Couple (BUG-011)   Theo docs/DATABASE_SCHEMA.md mục 3.7/5 (chi tiết hơn blueprint), ưu tiên an toàn riêng tư theo CLAUDE.md mục 8   Nếu sau này muốn người yêu xem được địa chỉ của nhau, cần đổi thiết kế + hỏi lại chủ dự án
   2026-11-17   M3: `default_radius_m` lưu mét trong DB, transport mode lưu UPPERCASE (`DRIVE/TWO_WHEELER/WALK/TRANSIT`) (BUG-005, BUG-006)   Mét khớp quy ước DATABASE_SCHEMA.md; UPPERCASE khớp enum thật của Google Routes API (gọi ở M5/M6), tránh thêm tầng dịch nghĩa   UI vẫn hiển thị km cho người dùng; không đổi giá trị transport mode khi nối Routes API thật
+  2026-11-18   M4: đổi nguồn tìm địa điểm sang OpenStreetMap, dùng Nominatim (không dùng Overpass API vì các mirror công khai đều không kết nối được) thay Google Places (BUG-012)   Chủ dự án không có thẻ thanh toán, xác nhận qua AskUserQuestion   `provider` lưu `"openstreetmap"` thay vì `"google_places"`; rating/review/giờ mở cửa sẽ null ở hầu hết địa điểm — UI phải hiển thị "không có dữ liệu", không bịa. Cân nhắc lại khi tới M5 (Routes API) vì Google Routes cũng cần billing.
+  2026-11-18   M4: 4 danh mục khám phá (Café/Nhà hàng/Chụp ảnh/Vui chơi) map sang từ khoá tìm kiếm tiếng Anh (`cafe`/`restaurant`/`tourist attraction`/`entertainment`) khi gọi Nominatim   Nominatim khớp tag OSM tiếng Anh tốt hơn nhãn tiếng Việt hiển thị cho người dùng; nhãn UI không đổi   `CATEGORY_SEARCH_TERMS` trong `src/app/(tabs)/explore.tsx` — "Chụp ảnh"/"Vui chơi" là suy đoán hợp lý (không có category OSM khớp chính xác), có thể cần tinh chỉnh sau khi thấy kết quả thật
+  2026-11-18   M4: gọi Nominatim trực tiếp từ app (client), KHÔNG qua Supabase Edge Function như kế hoạch ban đầu ở `docs/API_INTEGRATION_SPEC.md`   Nominatim trả về HTTP 403 khi gọi từ IP server của Supabase (chặn IP cloud/datacenter) — đã deploy thử và xác nhận lỗi thật, không phải suy đoán   An toàn vì Nominatim không cần secret key; nếu sau này đổi provider cần secret (ví dụ quay lại Google), phải làm lại qua Edge Function
+  2026-11-18   Máy chủ dự án: chạy `npm run start`/`npx expo` bằng PowerShell (qua `npm.cmd`/`npx.cmd`), KHÔNG dùng Git Bash làm terminal chạy dev server   Git Bash (MINGW64) trên máy này giới hạn cứng 3200 file mở cùng lúc (`ulimit -n`/`ulimit -Hn` đều 3200, không nâng được) — Metro bundler crash `EMFILE` khi project đủ lớn. PowerShell mặc định chặn file `.ps1` (execution policy) nên phải gọi `.cmd` thẳng thay vì `npm`/`npx` trơn.   Nếu PowerShell cũng gặp EMFILE sau này, cài Watchman (watchman.github.io) là giải pháp triệt để hơn, chưa cần thiết lúc này
 
 ## 13. Việc tiếp theo
 
 Claude luôn cập nhật tối đa 3 việc tiếp theo theo thứ tự ưu tiên:
 
-1.  **M2-008** — chủ dự án (và người ấy) tự thử luồng tạo Couple/mời/tham
-    gia bằng 2 tài khoản thật trên điện thoại thật (hoặc xác nhận chấp
-    nhận kết quả test tự động 2-tài-khoản đã làm là đủ) để đóng hoàn toàn
-    Milestone 2 — đây là việc duy nhất còn treo trước khi bắt đầu M4.
+1.  **M2-008** (DEFERRED) — chủ dự án tự thử luồng Couple trên 2 thiết bị
+    thật khi có đủ thiết bị. Không chặn tiến độ các milestone khác.
 2.  Dọn dữ liệu test trong Supabase nếu chủ dự án muốn (Couple
     "TEST - Playwright E2E", vài tài khoản `@mailinator.com`, 1 địa chỉ
     "Nhà tôi (TEST REST)") — chỉ làm khi được yêu cầu rõ ràng.
-3.  **M4 — Khám phá địa điểm**: cần xác nhận quota/billing Google Places
-    API trước khi bắt đầu (xem `docs/SETUP.md` mục Google Cloud) — việc
-    của chủ dự án, chưa cần làm gấp.
+3.  Milestone 4 còn 3 task nhỏ chưa làm: M4-006 (chi tiết địa điểm),
+    M4-008 (giới hạn request phía server), M4-009 (lưu địa điểm yêu
+    thích — cần thêm bảng `saved_places`). Có thể làm tiếp hoặc sang
+    Milestone 5 (bản đồ) tuỳ chủ dự án chọn.
 
 ## 14. Mẫu báo cáo cuối phiên
 

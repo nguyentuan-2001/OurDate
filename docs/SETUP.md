@@ -75,6 +75,60 @@ sẽ hướng dẫn cụ thể từng bước:
 Không có bước nào trong danh sách trên phát sinh chi phí nếu bạn chưa thực
 hiện — ứng dụng Milestone 1 chạy hoàn toàn miễn phí bằng Expo Go.
 
+## Milestone 4 — Khám phá địa điểm: đổi từ Google Places sang OpenStreetMap
+
+**Cập nhật 2026-11-18**: Ban đầu dự định dùng Google Places API (xem lịch
+sử bên dưới), nhưng Google bắt buộc phải có thẻ tín dụng/ghi nợ để bật
+billing, và chủ dự án hiện không có thẻ. Đã xác nhận với chủ dự án qua
+AskUserQuestion: **chuyển sang OpenStreetMap (Overpass API)** — miễn phí
+hoàn toàn, không cần tài khoản, không cần thẻ, không cần API key.
+
+Đánh đổi đã xác nhận: dữ liệu địa điểm từ OpenStreetMap ít chi tiết hơn
+Google — không có rating/review/giờ mở cửa chuẩn hoá cho mọi địa điểm
+(một số nơi có tag `opening_hours` nhưng không phải lúc nào cũng có).
+Ứng dụng sẽ hiển thị "không có dữ liệu" cho các trường còn thiếu, không
+bịa ra số liệu.
+
+**Không cần bạn làm gì thêm cho mục này** — Claude tự gọi được Overpass
+API công khai để test, không cần key/billing/tài khoản nào từ bạn.
+
+Nếu sau này muốn chuyển lại dùng Google Places (ví dụ khi có thẻ, hoặc
+cần dữ liệu rating/review đầy đủ hơn), hướng dẫn cũ vẫn còn dùng được:
+
+<details>
+<summary>Hướng dẫn Google Cloud (lưu lại phòng khi cần dùng sau)</summary>
+
+1. Vào https://console.cloud.google.com, tạo project mới (hoặc dùng
+   project có sẵn).
+2. Vào **Billing** → liên kết một tài khoản thanh toán (cần thẻ).
+3. Vào **Billing → Budgets & alerts**, tạo ngân sách (ví dụ 5-10
+   USD/tháng) kèm cảnh báo email khi gần đạt mức đó.
+4. Vào **APIs & Services → Library**, tìm và bật **"Places API (New)"**.
+5. Vào **APIs & Services → Credentials**, tạo **API key** mới.
+6. Giới hạn API key: **"Restrict key"** → chỉ cho phép **Places API
+   (New)**; **Application restrictions** chọn **None** (key chạy ở
+   server, không phải trình duyệt/app).
+7. Đặt key vào `.env` (`GOOGLE_MAPS_SERVER_API_KEY=...`), không gửi qua
+   chat.
+
+</details>
+
+## Milestone 4 — cập nhật: gọi OpenStreetMap trực tiếp từ app
+
+**Cập nhật 2026-11-18**: Ban đầu định gọi OpenStreetMap (Nominatim) qua
+một Edge Function trên Supabase (đã deploy thử). Nhưng test thật phát
+hiện Nominatim từ chối request đến từ hạ tầng server của Supabase (lỗi
+403) — họ chặn IP cloud/datacenter theo chính sách chống lạm dụng, dù
+cùng request đó chạy bình thường từ máy khác.
+
+**Đã sửa**: app gọi thẳng Nominatim từ điện thoại (không qua server
+nữa) — an toàn vì Nominatim không cần API key bí mật nào để bảo vệ.
+Edge Function đã deploy có thể xoá đi (không còn dùng) qua Supabase
+Dashboard → Edge Functions → xoá function "places-search" nếu muốn dọn
+dẹp, không bắt buộc.
+
+**Không cần bạn làm gì thêm** cho mục này.
+
 ## Xử lý sự cố thường gặp
 
 - **"Could not connect to development server"**: kiểm tra điện thoại và máy

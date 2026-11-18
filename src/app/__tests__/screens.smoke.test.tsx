@@ -47,7 +47,7 @@ describe('Screen smoke tests (render without crashing, after UI redesign)', () =
   });
 
   it('Explore renders key content', async () => {
-    await render(<ExploreScreen />);
+    await render(withProviders(<ExploreScreen />));
     expect(screen.getByText('Khám phá ♡')).toBeTruthy();
     expect(screen.getByText('Gần bạn nhất')).toBeTruthy();
   });
