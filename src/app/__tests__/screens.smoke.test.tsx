@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 
 import { AuthProvider } from '@/features/auth/AuthProvider';
 import { CoupleProvider } from '@/features/couple/CoupleProvider';
+import { PreferencesProvider } from '@/features/preferences/PreferencesProvider';
 
 import DatesScreen from '../(tabs)/dates';
 import ExploreScreen from '../(tabs)/explore';
@@ -13,11 +14,15 @@ import ItineraryResultScreen from '../itinerary-result';
 import CreateCoupleScreen from '../(onboarding)/create-couple';
 import OnboardingChoiceScreen from '../(onboarding)/index';
 import JoinCoupleScreen from '../(onboarding)/join-couple';
+import PreferencesScreen from '../preferences';
+import PrivatePlacesScreen from '../private-places';
 
 function withProviders(ui: ReactElement) {
   return (
     <AuthProvider>
-      <CoupleProvider>{ui}</CoupleProvider>
+      <CoupleProvider>
+        <PreferencesProvider>{ui}</PreferencesProvider>
+      </CoupleProvider>
     </AuthProvider>
   );
 }
@@ -30,7 +35,7 @@ describe('Screen smoke tests (render without crashing, after UI redesign)', () =
   });
 
   it('Planner renders key content', async () => {
-    await render(<PlannerScreen />);
+    await render(withProviders(<PlannerScreen />));
     expect(screen.getByText('AI Date Planner ✨')).toBeTruthy();
     expect(screen.getByText('Tạo lịch trình bằng AI ✨')).toBeTruthy();
   });
@@ -74,5 +79,15 @@ describe('Screen smoke tests (render without crashing, after UI redesign)', () =
   it('JoinCouple renders key content', async () => {
     await render(withProviders(<JoinCoupleScreen />));
     expect(screen.getByText('Nhập mã mời ♡')).toBeTruthy();
+  });
+
+  it('PrivatePlaces renders key content', async () => {
+    await render(withProviders(<PrivatePlacesScreen />));
+    expect(screen.getByText('Địa chỉ riêng tư')).toBeTruthy();
+  });
+
+  it('Preferences renders key content', async () => {
+    await render(withProviders(<PreferencesScreen />));
+    expect(screen.getByText('Sở thích & lịch trình')).toBeTruthy();
   });
 });

@@ -1,29 +1,47 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, View } from 'react-native';
 
 import { CatHeartIllustration } from '@/components/illustrations/CatHeartIllustration';
 import { Button, Chip, FieldCard, Input, Screen, Text } from '@/components/ui';
 import { interestOptions, transportOptions } from '@/constants/mock-data';
+import { usePreferences, type TransportMode } from '@/features/preferences/PreferencesProvider';
 import { useTheme } from '@/hooks/use-theme';
+import { formatVnd } from '@/utils/format';
 
-const startPointOptions = ['Nhà tôi', 'Nhà người yêu', 'Tự chọn điểm khác'] as const;
+const CUSTOM_START_POINT = 'Tự chọn điểm khác';
 
 export default function PlannerScreen() {
   const { colors, spacing } = useTheme();
+  const { privatePlaces, preferences, isLoading: isLoadingPreferences } = usePreferences();
 
   const [date, setDate] = useState('08/11/2026');
   const [startTime, setStartTime] = useState('14:00');
   const [endTime, setEndTime] = useState('20:00');
   const [budget, setBudget] = useState('500.000đ');
   const [radiusKm, setRadiusKm] = useState('15');
-  const [transportMode, setTransportMode] =
-    useState<(typeof transportOptions)[number]['value']>('TWO_WHEELER');
-  const [startPoint, setStartPoint] = useState<(typeof startPointOptions)[number]>(startPointOptions[0]);
+  const [transportMode, setTransportMode] = useState<TransportMode>('TWO_WHEELER');
+  const [startPoint, setStartPoint] = useState<string>(CUSTOM_START_POINT);
   const [pickupPartnerFirst, setPickupPartnerFirst] = useState(true);
   const [selectedInterests, setSelectedInterests] = useState<string[]>(['food']);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (isLoadingPreferences) return;
+    queueMicrotask(() => {
+      setRadiusKm(String(preferences.radiusKm));
+      setTransportMode(preferences.transportMode);
+      setStartPoint(privatePlaces[0]?.label ?? CUSTOM_START_POINT);
+      if (preferences.budgetVnd) {
+        setBudget(`${formatVnd(preferences.budgetVnd)}đ`);
+      }
+    });
+    // Chỉ nạp giá trị mặc định một lần sau khi tải xong, tránh ghi đè lúc người dùng đang chỉnh sửa form.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingPreferences]);
+
+  const startPointOptions = [...privatePlaces.map((place) => place.label), CUSTOM_START_POINT];
 
   function toggleInterest(value: string) {
     setSelectedInterests((prev) =>
@@ -138,9 +156,11 @@ export default function PlannerScreen() {
               />
             ))}
           </View>
-          <Text variant="caption" color="textSecondary">
-            Địa chỉ nhà sẽ được cấu hình riêng tư ở Milestone 3 — hiện tại đây chỉ là lựa chọn giao diện.
-          </Text>
+          {privatePlaces.length === 0 ? (
+            <Text variant="caption" color="textSecondary">
+              Bạn chưa có địa chỉ riêng tư nào — vào Cài đặt → Địa chỉ riêng tư để thêm.
+            </Text>
+          ) : null}
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

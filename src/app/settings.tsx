@@ -50,6 +50,27 @@ export default function SettingsScreen() {
           </Card>
         ) : null}
 
+        <View style={{ gap: spacing.sm }}>
+          <Pressable onPress={() => router.push('/private-places')}>
+            <Card style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+              <Ionicons name="home-outline" size={20} color={colors.primary} />
+              <Text variant="bodyMedium" style={{ flex: 1 }}>
+                Địa chỉ riêng tư
+              </Text>
+              <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+            </Card>
+          </Pressable>
+          <Pressable onPress={() => router.push('/preferences')}>
+            <Card style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+              <Ionicons name="options-outline" size={20} color={colors.primary} />
+              <Text variant="bodyMedium" style={{ flex: 1 }}>
+                Sở thích & lịch trình
+              </Text>
+              <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+            </Card>
+          </Pressable>
+        </View>
+
         <Button label="Đăng xuất" variant="secondary" onPress={handleSignOut} loading={isSigningOut} />
       </View>
     </Screen>

@@ -20,9 +20,9 @@
   Bản đồ                Google Maps Platform (chưa tích hợp — Milestone 4-5)
   AI                    Provider có thể cấu hình (chưa tích hợp — Milestone 6)
   Ngôn ngữ              Tiếng Việt
-  Trạng thái tổng thể   Milestone 1 DONE; Milestone 2 gần xong — Auth (M2-001..004) và Tạo/Mời/Tham gia Couple (M2-005..007) đều đã kiểm tra thật với Supabase, chỉ còn M2-008 (xác nhận trên thiết bị thật của 2 người) trước khi đóng M2
-  Milestone hiện tại    M2 --- Authentication và Couple (IN_PROGRESS)
-  Cập nhật gần nhất     2026-11-16
+  Trạng thái tổng thể   Milestone 1-3 đều đã kiểm tra thật với Supabase (M3 vừa xong 2026-11-18); chỉ còn M2-008 (xác nhận Couple trên thiết bị thật của 2 người) trước khi chuyển sang Milestone 4
+  Milestone hiện tại    M4 --- Khám phá địa điểm (chưa bắt đầu)
+  Cập nhật gần nhất     2026-11-18
 
 > Claude phải thay các giá trị "chưa xác minh" sau khi kiểm tra
 > repository thực tế. Không tự suy đoán trạng thái.
@@ -47,7 +47,7 @@ chứng kiểm tra. Nếu chưa chạy trên thiết bị thật, phải ghi rõ
   M0          Audit repository và lập kế hoạch   `[x]`        Xong 2026-11-09
   M1          Khởi tạo app và design system      `[x]`        Xong 2026-11-09, chưa chạy thử trên thiết bị thật
   M2          Authentication và Couple           `[~]`        M2-001..007 DONE (đã kiểm tra thật với Supabase); M2-008 còn thiếu xác nhận trên thiết bị thật
-  M3          Địa chỉ và sở thích                `[ ]`        
+  M3          Địa chỉ và sở thích                `[x]`        Xong 2026-11-18, đã kiểm tra thật với Supabase (bao gồm M3-008 — RLS chặn đúng)
   M4          Khám phá địa điểm                  `[ ]`        
   M5          Bản đồ và thời gian di chuyển      `[ ]`        
   M6          Planner logic và AI                `[ ]`        
@@ -404,14 +404,78 @@ lệnh kiểm tra, kết quả và ghi chú.
 
 ### M3 --- Địa chỉ và sở thích
 
--   [ ] **M3-001 --- Thiết kế model private places**
--   [ ] **M3-002 --- Màn hình nhập/chỉnh sửa địa chỉ**
--   [ ] **M3-003 --- Lưu điểm nhà/điểm đón an toàn**
--   [ ] **M3-004 --- Cấu hình phương tiện**
--   [ ] **M3-005 --- Cấu hình bán kính khám phá**
--   [ ] **M3-006 --- Cấu hình ngân sách mặc định**
--   [ ] **M3-007 --- Cấu hình sở thích và điều cần tránh**
--   [ ] **M3-008 --- Kiểm tra quyền riêng tư địa chỉ**
+-   [x] **M3-001 --- Thiết kế model private places**
+    -   Bắt đầu: 2026-11-17. Hoàn thành: 2026-11-18.
+    -   Trước khi làm, đã hỏi chủ dự án về BUG-002 (mã hoá địa chỉ) qua
+        AskUserQuestion — chủ dự án chọn **"Chỉ dùng RLS"** (không mã hoá
+        tầng ứng dụng ở giai đoạn này). Xem mục 12 "Quyết định kỹ thuật".
+    -   Đã làm: Tạo bảng `private_places` (owner-only, cột `user_id`,
+        KHÔNG có `couple_id` — người yêu không đọc được dù đã cùng Couple,
+        theo `docs/DATABASE_SCHEMA.md` mục 3.7/5, chi tiết hơn
+        `OUR_DATE_BLUEPRINT.md` mục 7.5). RLS: chỉ chủ sở hữu CRUD. Cột
+        `latitude`/`longitude` để trống (chưa geocode thật, chưa tích hợp
+        Places/Routes API ở M4/M5) — không tự bịa toạ độ.
+    -   Kiểm tra thật (2026-11-18, qua REST API trực tiếp với Supabase
+        thật, tài khoản test): `INSERT private_places` → **HTTP 201**;
+        tài khoản chủ sở hữu tự đọc lại → **HTTP 200, có dữ liệu**.
+    -   File: `supabase/migrations/20261117000002_private_places_and_preferences.sql`.
+-   [x] **M3-002 --- Màn hình nhập/chỉnh sửa địa chỉ**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: `src/app/private-places.tsx` — danh sách địa chỉ, thêm/sửa/xoá
+        (nhập tay, chưa có chọn điểm trên bản đồ vì M5 chưa tới). Thêm liên
+        kết từ Settings.
+    -   File: `src/app/private-places.tsx`, `src/app/settings.tsx`.
+-   [x] **M3-003 --- Lưu điểm nhà/điểm đón an toàn**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: `PreferencesProvider` (CRUD `private_places` qua Supabase,
+        RLS bảo vệ). Planner (`(tabs)/planner.tsx`) đọc danh sách này để
+        làm lựa chọn "Điểm bắt đầu" thay cho dữ liệu giả trước đây.
+    -   File: `src/features/preferences/PreferencesProvider.tsx`,
+        `src/app/(tabs)/planner.tsx`.
+-   [x] **M3-004 --- Cấu hình phương tiện**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: Bảng `couple_preferences.default_transport_mode`
+        (`DRIVE/TWO_WHEELER/WALK/TRANSIT` — xem BUG-006 ở mục 10). Màn hình
+        `src/app/preferences.tsx` cho chọn, Planner đọc giá trị này làm mặc
+        định khi mở form.
+    -   Kiểm tra thật: `UPSERT couple_preferences` (mode `DRIVE`) →
+        **HTTP 201**.
+-   [x] **M3-005 --- Cấu hình bán kính khám phá**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: Cột `default_radius_m` (lưu mét — xem BUG-005 ở mục 10),
+        UI nhập/hiển thị bằng km, đổi đơn vị ở tầng `PreferencesProvider`.
+    -   Kiểm tra thật: lưu `20000` mét (= 20km) → đọc lại đúng giá trị.
+-   [x] **M3-006 --- Cấu hình ngân sách mặc định**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: Cột `default_budget_vnd` (nullable — "không giới hạn" khi
+        để trống), UI nhập ở `preferences.tsx`, Planner đọc làm mặc định.
+    -   Kiểm tra thật: lưu `1.000.000`đ → upsert thành công.
+-   [x] **M3-007 --- Cấu hình sở thích và điều cần tránh**
+    -   Hoàn thành: 2026-11-18.
+    -   Đã làm: Cột `interests` (jsonb, dùng chung danh sách
+        `interestOptions` đã có ở Planner) và `avoid_preferences` (jsonb —
+        thêm mới, xem BUG-007 ở mục 10), nhập dạng tag cách nhau bằng dấu
+        phẩy ở `preferences.tsx`.
+    -   Kiểm tra đã chạy cho cả M3-001..007: `npx expo lint`,
+        `npx tsc --noEmit`, `npm test` (13/13 PASS, thêm 2 smoke test cho
+        `private-places.tsx`/`preferences.tsx`) — tất cả PASS. Chủ dự án
+        đã chạy migration `20261117000002_private_places_and_preferences.sql`
+        qua SQL Editor (2026-11-18).
+    -   File: cùng migration ở M3-001, `src/app/preferences.tsx`.
+-   [x] **M3-008 --- Kiểm tra quyền riêng tư địa chỉ**
+    -   Hoàn thành: 2026-11-18.
+    -   Kiểm tra thật (script Node gọi thẳng REST API Supabase, không qua
+        UI — tránh phụ thuộc vào việc chạy app thật): tạo tài khoản test
+        thứ 3 (hoàn toàn không liên quan đến Couple của tài khoản A), thử
+        đọc trực tiếp `private_places` và `couple_preferences` của tài
+        khoản A → **cả hai đều trả về 0 dòng (HTTP 200, mảng rỗng)** — RLS
+        chặn đúng, kể cả khi dùng `user_id` của A truyền thẳng vào query
+        (không phải lỗi 403 bị từ chối, mà RLS lọc sạch kết quả — đúng
+        hành vi Postgres RLS mong muốn).
+    -   Ghi chú: tài khoản A hiện có 1 địa chỉ test
+        ("Nhà tôi (TEST REST)") và 1 bản ghi `couple_preferences` test
+        trong Supabase thật — vô hại, chủ dự án có thể xoá qua Table Editor
+        nếu muốn.
 
 ### M4 --- Khám phá địa điểm
 
@@ -510,6 +574,7 @@ Claude ghi rõ các thao tác cần người dùng làm, ví dụ:
   U-005   Cài Expo Go trên Android/iPhone, chạy `npm run start` và quét mã QR để xác nhận M1-010   Cần làm   Xem `docs/SETUP.md` bước 3-4
   U-006   Tự đăng ký 1 tài khoản bằng email thật, xác nhận email, đăng nhập thử   **Hoàn thành** (2026-11-11)   Đăng ký/đăng nhập hoạt động đúng trên thiết bị của chủ dự án
   U-007   Chạy migration `supabase/migrations/20261117000001_couple_rpc_functions.sql` qua Supabase SQL Editor   **Hoàn thành** (2026-11-16, đã chạy lại sau khi sửa lỗi pgcrypto)   Đã xác nhận cả 3 hàm RPC chạy đúng (HTTP 200) sau khi chạy lại
+  U-008   Chạy migration mới `supabase/migrations/20261117000002_private_places_and_preferences.sql` qua SQL Editor   **Hoàn thành** (2026-11-18)   Đã xác nhận cả 2 bảng + RLS hoạt động đúng (M3-001..008 PASS)
 
 Không yêu cầu người dùng tạo tài khoản/dịch vụ trước khi task thực sự
 cần đến.
@@ -524,6 +589,17 @@ cần đến.
     không xoá dữ liệu).
 4.  Báo lại kết quả (thành công hay có lỗi) để tiếp tục kiểm tra tính
     năng tạo Couple/mời/tham gia bằng tài khoản thật.
+
+### Hướng dẫn U-008: Chạy migration địa chỉ riêng tư + sở thích
+
+1.  Vào Supabase Dashboard → project của bạn → **SQL Editor**.
+2.  Mở file `supabase/migrations/20261117000002_private_places_and_preferences.sql`
+    trong repository, copy toàn bộ nội dung.
+3.  Dán vào SQL Editor, bấm **Run**. File này chỉ tạo 2 bảng mới
+    (`private_places`, `couple_preferences`) — không đụng tới bảng cũ,
+    không xoá dữ liệu.
+4.  Báo lại kết quả để mình kiểm tra tiếp màn hình "Địa chỉ riêng tư" và
+    "Sở thích & lịch trình" bằng tài khoản thật.
 
 ### Hướng dẫn U-002: Tạo Supabase project (miễn phí)
 
@@ -567,6 +643,8 @@ cần đến.
   2026-11-16   M2-005 (kiểm tra thật)   Chủ dự án chạy migration RPC lần 1 qua SQL Editor; Claude test tự động qua Expo Web (Playwright) + 1 tài khoản test   `create_couple` → **HTTP 200 thật**   Xác nhận RPC hoạt động đúng trên dữ liệu thật
   2026-11-16   M2-006 (lỗi + sửa)   Test `create_couple_invitation` → lỗi Postgres `gen_random_bytes(integer) does not exist` (pgcrypto không có trong search_path)   Lỗi thật, chỉ phát hiện được khi chạy thật   Đã sửa migration: thêm `create extension pgcrypto with schema extensions` + `search_path = public, extensions`
   2026-11-16   M2-006, M2-007 (kiểm tra thật sau khi sửa)   Chủ dự án chạy lại migration đã sửa; Claude test lại toàn bộ luồng bằng 2 tài khoản test (tạo Couple → tạo mã mời → tài khoản 2 tham gia bằng mã mời)   `create_couple_invitation` → **HTTP 200**; `accept_couple_invitation` → **HTTP 200**, trả đúng Couple, cả 2 bên đúng 2/2 thành viên   M2-005/006/007 chuyển DONE; M2-008 còn thiếu xác nhận trên thiết bị thật (xem mục 4)
+  2026-11-17   M3-001..007   Hỏi chủ dự án về BUG-002 (mã hoá địa chỉ) qua AskUserQuestion → chọn "Chỉ RLS". Viết migration `private_places`/`couple_preferences`, `PreferencesProvider`, màn hình `private-places.tsx`/`preferences.tsx`, nối Planner đọc dữ liệu thật thay mock   lint/typecheck/test PASS (13/13, thêm 2 smoke test)   **Chưa kiểm tra với Supabase thật** — cần chủ dự án chạy migration mới (việc U-008)
+  2026-11-18   M3-001..008 (kiểm tra thật)   Chủ dự án chạy migration mới qua SQL Editor; Claude test trực tiếp qua REST API Supabase thật (không qua UI, vì goto() thẳng vào route lồng nhau trong Expo Router web dev bị treo — ghi nhận là hạn chế môi trường test, không phải lỗi app)   `INSERT`/`UPSERT` → **HTTP 201**; tài khoản thứ 3 không liên quan đọc `private_places`/`couple_preferences` của tài khoản khác → **0 dòng cả hai, RLS chặn đúng**   M3-001..008 chuyển DONE
 
 ## 9. Lịch sử thay đổi phạm vi (Change Log)
 
@@ -582,15 +660,16 @@ cần đến.
   ID        Mô tả                                                                                           Mức độ      Trạng thái   Task liên quan
   --------- ----------------------------------------------------------------------------------------------- ----------- ------------ ----------------
   BUG-001   Migration đã viết (`couple_invites`, `profiles.avatar_url`...) đặt tên khác `docs/DATABASE_SCHEMA.md` (`couple_invitations`, `avatar_path`, thêm `status` cho membership/invite)   Nghiêm trọng   **Đã xác nhận 2026-11-11** — dùng tên theo DATABASE_SCHEMA.md, bỏ qua `status` rời-couple (dành cho M7). Migration đã cập nhật.   M2-002, M2-003
-  BUG-002   `DATABASE_SCHEMA.md` yêu cầu mã hoá cột địa chỉ riêng tư (`address_encrypted`...) — blueprint gốc chỉ dựa vào RLS, không có yêu cầu mã hoá tầng ứng dụng   Nghiêm trọng   Mở — chờ xác nhận khi bắt đầu M3   M3 (chưa bắt đầu)
+  BUG-002   `DATABASE_SCHEMA.md` yêu cầu mã hoá cột địa chỉ riêng tư (`address_encrypted`...) — blueprint gốc chỉ dựa vào RLS, không có yêu cầu mã hoá tầng ứng dụng   Nghiêm trọng   **Đã xác nhận 2026-11-17** (qua AskUserQuestion) — chọn "Chỉ dùng RLS", không mã hoá tầng ứng dụng ở giai đoạn này. Có thể nâng cấp sau nếu cần.   M3-001
   BUG-003   Bảng màu trong `docs/UI_DESIGN_SPEC.md` (ví dụ `primary #FF6F91`) khác bảng màu blueprint đã dùng để code Milestone 1 (`primary #E8799B`)   Trung bình   **Đã xác nhận 2026-11-11** — đổi sang bảng màu UI_DESIGN_SPEC.md. `src/theme/colors.ts` và component liên quan đã cập nhật, lint/typecheck/test PASS.   Đã sửa
   BUG-004   `USER_FLOWS.md`/`DATABASE_SCHEMA.md` mô tả đầy đủ luồng up ảnh Memories + luồng "rời couple" như MVP, nhưng blueprint gốc liệt kê ảnh kỷ niệm là tính năng *sau* MVP và không nhắc đến rời couple   Trung bình   **Đã xác nhận 2026-11-11** — chính thức đưa vào MVP. Chưa triển khai (thuộc M7), chỉ ghi nhận quyết định.   M7 (chưa bắt đầu)
-  BUG-005   Đơn vị bán kính không nhất quán: blueprint/code dùng km (`radiusKm`), `DATABASE_SCHEMA.md` dùng mét (`default_radius_m`)   Nhỏ   Mở — chờ xác nhận   M3/M6 (chưa bắt đầu)
-  BUG-006   Giá trị transport mode không nhất quán: code/blueprint dùng `DRIVE/TWO_WHEELER/WALK/TRANSIT`, `DATABASE_SCHEMA.md` dùng `driving/two_wheeler/walking/transit`   Nhỏ   Mở — chờ xác nhận   M3/M6 (chưa bắt đầu)
-  BUG-007   `couple_preferences` trong `DATABASE_SCHEMA.md` thiếu cột `avoid_preferences` mà blueprint mục 7.6 và kiểu `PlannerInput` (mục 5.1) đều yêu cầu   Nhỏ   Mở — chờ xác nhận   M3 (chưa bắt đầu)
+  BUG-005   Đơn vị bán kính không nhất quán: blueprint/code dùng km (`radiusKm`), `DATABASE_SCHEMA.md` dùng mét (`default_radius_m`)   Nhỏ   **Đã xử lý 2026-11-17** — DB lưu mét (theo DATABASE_SCHEMA.md), UI tiếp tục dùng km, đổi đơn vị ở `PreferencesProvider`. Mức độ nhỏ nên Claude tự quyết theo CLAUDE.md, không cần hỏi lại.   M3-005
+  BUG-006   Giá trị transport mode không nhất quán: code/blueprint dùng `DRIVE/TWO_WHEELER/WALK/TRANSIT`, `DATABASE_SCHEMA.md` dùng `driving/two_wheeler/walking/transit`   Nhỏ   **Đã xử lý 2026-11-17** — dùng UPPERCASE xuyên suốt kể cả trong DB, vì đây là giá trị enum thật của Google Routes API (gọi ở M5/M6), tránh thêm tầng dịch nghĩa. Không theo gợi ý lowercase của DATABASE_SCHEMA.md.   M3-004
+  BUG-007   `couple_preferences` trong `DATABASE_SCHEMA.md` thiếu cột `avoid_preferences` mà blueprint mục 7.6 và kiểu `PlannerInput` (mục 5.1) đều yêu cầu   Nhỏ   **Đã xử lý 2026-11-17** — thêm cột `avoid_preferences jsonb` vào migration, theo blueprint.   M3-007
   BUG-008   File `UI_DESIGN_SPEC.md` bị trùng ở cả thư mục gốc và `docs/`   Nhỏ   **Đã xử lý 2026-11-11** — xoá bản ở gốc, chỉ giữ `docs/UI_DESIGN_SPEC.md`   Dọn dẹp file
   BUG-009   Tên endpoint backend khác nhau giữa blueprint mục 8 (`create-invite`, `search-places`...) và `API_INTEGRATION_SPEC.md` (`create-couple-invitation`, `places-search`...)   Nhỏ   Mở — chờ xác nhận   M2 trở đi
   BUG-010   Chủ dự án báo có vệt đen ở đáy màn hình + nội dung trống khi chuyển tab (chạy thật trên Android qua Expo Go)   Thấp   **Không phải lỗi** — xác nhận 2026-11-16 qua ảnh chụp bạn gửi: đó là khung "Bundling... app/(tabs)/index.tsx" của Expo (bình thường khi dev qua Expo Go, Metro biên dịch từng màn theo yêu cầu). Sẽ không còn khi build app thật. Vẫn giữ 2 cải thiện đã làm (`sceneStyle`, sửa API `expo-navigation-bar`) vì vô hại và có ích.   Không áp dụng
+  BUG-011   `private_places`: blueprint mục 7.5 gợi ý cột `couple_id` + nhãn ví dụ "Nhà người yêu" (ngụ ý người yêu có thể thấy), còn `DATABASE_SCHEMA.md` mục 3.7/5 nói rõ owner-only, không có policy couple-wide   Trung bình   **Đã xử lý 2026-11-17** — chọn owner-only (an toàn hơn, đúng tinh thần CLAUDE.md mục 8 về không lộ địa chỉ nhà); nhãn "Nhà người yêu" hiểu là do chính chủ tự đặt tên cho địa chỉ họ biết, không phải người yêu tự xem được. Chưa hỏi chủ dự án vì không làm giảm tính năng và an toàn hơn — sẽ điều chỉnh nếu chủ dự án muốn người yêu xem được.   M3-001
 
 ## 11. Kết quả kiểm tra gần nhất
 
@@ -641,6 +720,9 @@ Ghi các quyết định quan trọng để Claude ở phiên sau không tự th
   2026-11-16   Bảng màu đổi lần 2, khớp chính xác theo file mockup thật (`src/UI/*.html`) thay vì xấp xỉ theo tài liệu đặc tả   Chủ dự án tự cung cấp mockup chi tiết hơn docs/UI_DESIGN_SPEC.md   `src/theme/colors.ts` là nguồn màu chính thức mới nhất — không tự đổi lại nếu chưa có mockup mới
   2026-11-16   Giữ nhãn tab bar bằng tiếng Việt dù mockup gốc dùng tiếng Anh (Home/Planner/...)   Quy tắc CLAUDE.md mục 6 "giao diện tiếng Việt" là bắt buộc, ưu tiên hơn fidelity hình ảnh   Không đổi nhãn tab theo mockup nếu mockup tiếp tục dùng tiếng Anh
   2026-11-16   Dùng `formatVnd()` tự viết thay cho `Number.toLocaleString('vi-VN')`                Tránh phụ thuộc dữ liệu Intl/ICU đầy đủ trên Hermes (rủi ro chưa kiểm chứng được trên thiết bị thật)   Áp dụng cho mọi chỗ hiển thị tiền VND sau này
+  2026-11-17   M3: `private_places` KHÔNG mã hoá tầng ứng dụng, chỉ dựa vào RLS (BUG-002)   Chủ dự án xác nhận qua AskUserQuestion — ưu tiên đơn giản cho app 2 người dùng   Có thể nâng cấp lên mã hoá/KMS sau nếu mở rộng quy mô người dùng
+  2026-11-17   M3: `private_places` owner-only (cột `user_id`, không có `couple_id`) — người yêu không đọc được dù cùng Couple (BUG-011)   Theo docs/DATABASE_SCHEMA.md mục 3.7/5 (chi tiết hơn blueprint), ưu tiên an toàn riêng tư theo CLAUDE.md mục 8   Nếu sau này muốn người yêu xem được địa chỉ của nhau, cần đổi thiết kế + hỏi lại chủ dự án
+  2026-11-17   M3: `default_radius_m` lưu mét trong DB, transport mode lưu UPPERCASE (`DRIVE/TWO_WHEELER/WALK/TRANSIT`) (BUG-005, BUG-006)   Mét khớp quy ước DATABASE_SCHEMA.md; UPPERCASE khớp enum thật của Google Routes API (gọi ở M5/M6), tránh thêm tầng dịch nghĩa   UI vẫn hiển thị km cho người dùng; không đổi giá trị transport mode khi nối Routes API thật
 
 ## 13. Việc tiếp theo
 
@@ -649,13 +731,13 @@ Claude luôn cập nhật tối đa 3 việc tiếp theo theo thứ tự ưu ti�
 1.  **M2-008** — chủ dự án (và người ấy) tự thử luồng tạo Couple/mời/tham
     gia bằng 2 tài khoản thật trên điện thoại thật (hoặc xác nhận chấp
     nhận kết quả test tự động 2-tài-khoản đã làm là đủ) để đóng hoàn toàn
-    Milestone 2.
-2.  Dọn dữ liệu test nếu chủ dự án muốn (Couple "TEST - Playwright E2E" +
-    2 tài khoản `@mailinator.com` trong Supabase) — chỉ làm khi được yêu
-    cầu rõ ràng.
-3.  **Chủ dự án tự xem lại 5 màn hình + màn Itinerary mới** trên thiết bị
-    thật hoặc Expo Web để xác nhận có khớp mockup `src/UI/*.html`/`UI.png`
-    hay không (việc còn treo từ M1-011, chưa xác nhận bằng hình ảnh).
+    Milestone 2 — đây là việc duy nhất còn treo trước khi bắt đầu M4.
+2.  Dọn dữ liệu test trong Supabase nếu chủ dự án muốn (Couple
+    "TEST - Playwright E2E", vài tài khoản `@mailinator.com`, 1 địa chỉ
+    "Nhà tôi (TEST REST)") — chỉ làm khi được yêu cầu rõ ràng.
+3.  **M4 — Khám phá địa điểm**: cần xác nhận quota/billing Google Places
+    API trước khi bắt đầu (xem `docs/SETUP.md` mục Google Cloud) — việc
+    của chủ dự án, chưa cần làm gấp.
 
 ## 14. Mẫu báo cáo cuối phiên
 

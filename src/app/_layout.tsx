@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider, useAuth } from '@/features/auth/AuthProvider';
 import { CoupleProvider, useCouple } from '@/features/couple/CoupleProvider';
+import { PreferencesProvider } from '@/features/preferences/PreferencesProvider';
 import { useTheme } from '@/hooks/use-theme';
 import { getNavigationTheme } from '@/theme';
 
@@ -37,6 +38,8 @@ function RootNavigator() {
       <Stack.Protected guard={!!session && !!couple}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="settings" />
+        <Stack.Screen name="private-places" />
+        <Stack.Screen name="preferences" />
         <Stack.Screen name="itinerary-result" options={{ presentation: 'card' }} />
       </Stack.Protected>
       <Stack.Protected guard={!!session && !couple}>
@@ -68,7 +71,9 @@ export default function RootLayout() {
           <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
           <AuthProvider>
             <CoupleProvider>
-              <RootNavigator />
+              <PreferencesProvider>
+                <RootNavigator />
+              </PreferencesProvider>
             </CoupleProvider>
           </AuthProvider>
         </ThemeProvider>
